@@ -1,0 +1,81 @@
+# Copyright (c) 2024 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+menu "Nordic Thingy91 Demo Configuration"
+
+config THINGY91_DEMO_SENSOR_INTERVAL_MS
+    int "Sensor reading interval in milliseconds"
+    default 5000
+    range 100 3600000
+    help
+      Interval between sensor readings in milliseconds.
+      Minimum 100ms, maximum 1 hour (3600000ms).
+
+config THINGY91_DEMO_MQTT_KEEPALIVE
+    int "MQTT keepalive interval in seconds"
+    default 60
+    range 10 65535
+    help
+      MQTT keepalive interval in seconds.
+      This determines how often MQTT ping messages are sent.
+
+config THINGY91_DEMO_DATA_BUFFER_SIZE
+    int "Data buffer size (number of entries)"
+    default 100
+    range 10 1000
+    help
+      Maximum number of sensor data entries to buffer.
+      Used when network connectivity is unavailable.
+
+config THINGY91_DEMO_ENABLE_SENSOR_SIMULATION
+    bool "Enable sensor data simulation"
+    default y if BOARD_QEMU_X86
+    default n
+    help
+      Enable simulation of sensor data when real sensors
+      are not available (e.g., in emulation environments).
+
+config THINGY91_DEMO_ENABLE_POWER_MANAGEMENT
+    bool "Enable advanced power management"
+    default y
+    depends on PM
+    help
+      Enable advanced power management features including
+      automatic sleep modes and battery monitoring.
+
+config THINGY91_DEMO_ENABLE_LED_ANIMATIONS
+    bool "Enable LED animations"
+    default y
+    help
+      Enable LED animation patterns for status indication.
+      Disable to reduce power consumption.
+
+config THINGY91_DEMO_MAX_LOG_ENTRIES
+    int "Maximum log entries in flash"
+    default 1000
+    range 100 10000
+    depends on LOG_BACKEND_FS
+    help
+      Maximum number of log entries to store in flash memory.
+
+config THINGY91_DEMO_CONFIG_VERSION
+    int "Configuration version number"
+    default 1
+    help
+      Configuration structure version for migration support.
+
+config THINGY91_DEMO_ENABLE_DIAGNOSTICS
+    bool "Enable system diagnostics"
+    default y
+    help
+      Enable comprehensive system diagnostics and health monitoring.
+
+config THINGY91_DEMO_WATCHDOG_TIMEOUT_MS
+    int "Watchdog timeout in milliseconds"
+    default 30000
+    range 1000 120000
+    depends on WATCHDOG
+    help
+      Watchdog timeout period in milliseconds.
+
+endmenu

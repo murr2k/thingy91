@@ -1,0 +1,35 @@
+# Copyright (c) 2024 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+manifest:
+  version: "0.13"
+
+  defaults:
+    remote: ncs
+
+  remotes:
+    - name: ncs
+      url-base: https://github.com/nrfconnect
+
+  projects:
+    - name: nrf
+      revision: v2.4.0
+      path: nrf
+    - name: zephyr
+      revision: v3.3.99-ncs1
+      path: zephyr
+    - name: mcuboot
+      revision: v1.10.0-ncs1
+      path: bootloader/mcuboot
+    - name: mbedtls
+      revision: v3.4.0-ncs1
+      path: modules/crypto/mbedtls
+    - name: nrfxlib
+      revision: v2.4.0
+      path: nrfxlib
+    - name: trusted-firmware-m
+      revision: v1.7.0-ncs1
+      path: modules/tee/tf-m/trusted-firmware-m
+
+  self:
+    path: thingy91-demo
