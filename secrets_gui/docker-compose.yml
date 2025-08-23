@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  secrets-gui:
+    build: .
+    container_name: secrets-manager-gui
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY:-change-me-in-production}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-changeme}
+    volumes:
+      # Mount encrypted secret files
+      - ../:/data:ro
+      - ~/.config/thingy91:/config
+    restart: unless-stopped
+    networks:
+      - secrets-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.secrets.rule=Host(`secrets.local`)"
+      - "traefik.http.services.secrets.loadbalancer.server.port=5000"
+
+networks:
+  secrets-net:
+    driver: bridge
