@@ -1,0 +1,45 @@
+{
+    "profile_version": "1.0.0",
+    "network_provider": "onomondo",
+    "profile_id": "ONOMONDO_THINGY91_001",
+    "credentials": {
+        "imsi": "REPLACE_WITH_YOUR_IMSI",
+        "iccid": "REPLACE_WITH_YOUR_ICCID",
+        "ki": "REPLACE_WITH_YOUR_KI_KEY",
+        "opc": "REPLACE_WITH_YOUR_OPC_KEY"
+    },
+    "network_config": {
+        "apn": "onomondo",
+        "preferred_plmn": [
+            "26201",
+            "26202",
+            "31026",
+            "31010"
+        ],
+        "rat_priority": [
+            "LTE-M",
+            "NB-IoT"
+        ],
+        "psm_config": {
+            "enabled": true,
+            "active_time": "10s",
+            "periodic_tau": "24h"
+        },
+        "edrx_config": {
+            "enabled": true,
+            "mode": "LTE-M",
+            "requested_value": "0010"
+        }
+    },
+    "security": {
+        "algorithm": "AES",
+        "key_size": 128,
+        "auth_type": "3G"
+    },
+    "features": {
+        "roaming": true,
+        "sms": true,
+        "voice": false,
+        "data": true
+    }
+}
