@@ -17,21 +17,33 @@ import argparse
 try:
     from cryptography.fernet import Fernet
     from cryptography.hazmat.primitives import hashes
-    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
     from cryptography.hazmat.backends import default_backend
     HAS_CRYPTO = True
-except ImportError:
+except ImportError as e:
     HAS_CRYPTO = False
-    print("Warning: cryptography not installed. Some features unavailable.")
-    print("Install with: pip install cryptography")
+    if __name__ == "__main__":
+        print(f"Warning: cryptography not available: {e}")
+        print("Install with: pip install cryptography")
 
 try:
     import keyring
-    HAS_KEYRING = True
-except ImportError:
+    from keyring.backends import fail
+    
+    # Check if keyring has a valid backend
+    backend = keyring.get_keyring()
+    if isinstance(backend, fail.Keyring):
+        HAS_KEYRING = False
+        if __name__ == "__main__":
+            print("Note: System keyring not available (common in WSL/containers).")
+            print("Using encrypted file storage instead.")
+    else:
+        HAS_KEYRING = True
+except ImportError as e:
     HAS_KEYRING = False
-    print("Warning: keyring not installed. System keyring unavailable.")
-    print("Install with: pip install keyring")
+    if __name__ == "__main__":
+        print("Warning: keyring not installed. System keyring unavailable.")
+        print("Install with: pip install keyring")
 
 
 class SecretsManager:
@@ -152,7 +164,7 @@ class EncryptedEnvFile:
     
     def _derive_key(self, password: bytes, salt: bytes) -> bytes:
         """Derive encryption key from password"""
-        kdf = PBKDF2(
+        kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
             salt=salt,
@@ -386,12 +398,27 @@ Examples:
     
     args = parser.parse_args()
     
+    # For WSL/containers, recommend encrypted file storage
+    if not HAS_KEYRING and args.command in ['setup', 'store', 'get', 'list']:
+        print("\n" + "="*50)
+        print("🔐 WSL/Container Detected - Using Encrypted Storage")
+        print("="*50)
+        if args.command == 'setup':
+            print("\nSwitching to encrypted file storage (more secure in WSL).")
+            args.command = 'encrypt'
+        elif args.command in ['store', 'get', 'list']:
+            print("\nKeyring not available in WSL. Use encrypted file instead:")
+            print(f"  1. Store secrets:  {sys.argv[0]} encrypt")
+            print(f"  2. Load secrets:   {sys.argv[0]} decrypt")
+            print(f"  3. Export to env:  {sys.argv[0]} export")
+            sys.exit(1)
+    
     # Execute command
     if args.command == 'setup':
         if HAS_KEYRING:
             SecretsManager.interactive_setup()
         else:
-            print("Keyring not available. Using encrypted file instead.")
+            # This shouldn't happen due to check above, but just in case
             args.command = 'encrypt'
     
     if args.command == 'store':
