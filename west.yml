@@ -1,5 +1,6 @@
 # Copyright (c) 2024 Nordic Semiconductor ASA
 # SPDX-License-Identifier: Apache-2.0
+# Updated for NCS v2.9.1 + SoftSIM Phase 2 Integration
 
 manifest:
   version: "0.13"
@@ -14,28 +15,32 @@ manifest:
       url-base: https://github.com/onomondo
 
   projects:
+    # Nordic Connect SDK v2.9.1 components (matching working baseline)
     - name: sdk-nrf
-      revision: v3.1.0
+      revision: v2.9.1
       path: nrf
     - name: sdk-zephyr
-      revision: v4.0.99-ncs1-2
-      path: zephyr
+      revision: v3.7.99-ncs1-1
+      path: zephyr  
     - name: sdk-mcuboot
-      revision: v2.1.0-ncs5-2
+      revision: v2.0.99-ncs6-3
       path: bootloader/mcuboot
     - name: sdk-mbedtls
-      revision: v3.6.3-ncs1-2
+      revision: v3.5.0-ncs6-2
       path: modules/crypto/mbedtls
     - name: sdk-nrfxlib
-      revision: v3.0.2
+      revision: v2.9.1
       path: nrfxlib
     - name: sdk-trusted-firmware-m
-      revision: v2.1.1-ncs4-2
+      revision: v2.0.0-ncs4-3
       path: modules/tee/tf-m/trusted-firmware-m
-    - name: onomondo-softsim
+    
+    # Onomondo SoftSIM integration (Phase 2)
+    # Using v5.1.0 which includes NCS v2.9.1 support (commit a393f70)
+    - name: nrf-softsim
       remote: onomondo
-      revision: main
+      revision: v5.1.0
       path: modules/lib/onomondo-softsim
 
   self:
-    path: thingy91-demo
+    path: asset_tracker_v2_source

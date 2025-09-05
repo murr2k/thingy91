@@ -4,7 +4,7 @@ build/
 _build/
 **/build*/
 
-# Nordic SDK/Zephyr specific
+# Nordic SDK/Zephyr specific (exclude SDK directories if they exist)
 .west/
 modules/
 bootloader/
@@ -15,7 +15,7 @@ nrfxlib/
 test/
 mbedtls/
 
-# Binary and hex files
+# Binary and hex files  
 *.hex
 *.bin
 *.elf
@@ -49,11 +49,12 @@ venv/
 env/
 .env
 
-# Logs and debugging
+# Logs and debugging  
 *.log
 *.jlink
 *.rtt
 trace.txt
+**/logs/
 
 # Temporary files
 *.tmp
@@ -68,18 +69,35 @@ trace.txt
 *.cert
 credentials/
 secrets/
+.env.*.encrypted
+secrets_gui/data/secrets.json
+secrets_gui/data/.master_key
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
 
 # Documentation build
 docs/_build/
 *.pdf
 
-# Project specific
+# Project specific - SoftSIM and testing
 softsim_profiles/
 decrypted_profiles/
 *.decrypted
 COM*.txt
 monitor_*.txt
+nul
 
-# Keep configuration templates
+# Nordic toolchain and debugging artifacts  
+*.deb
+JLink_*
+
+# Keep important configuration files
 !prj.conf.template
 !west.yml.template
+!PROJECT_PLAN.md
+!DEVELOPMENT_LOG.md
+!CHANGELOG.md
+!README.md

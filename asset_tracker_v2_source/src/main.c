@@ -12,6 +12,9 @@
 #include <modem/nrf_modem_lib.h>
 #include <zephyr/sys/reboot.h>
 #include <net/nrf_cloud.h>
+#if defined(CONFIG_SOFTSIM)
+#include <nrf_softsim.h>
+#endif
 
 /* Module name is used by the Application Event Manager macros in this file */
 #define MODULE main
@@ -540,6 +543,9 @@ int main(void)
 
 #if defined(CONFIG_NRF_MODEM_LIB)
 		modem_init();
+#if defined(CONFIG_SOFTSIM)
+		LOG_INF("SoftSIM integration enabled (auto-init)");
+#endif
 #endif
 	}
 
