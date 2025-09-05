@@ -1,0 +1,45 @@
+{
+    "profile_version": "1.0.0",
+    "network_provider": "onomondo",
+    "profile_id": "THINGY91_MURRAY_001",
+    "credentials": {
+        "imsi": "234502102769985",
+        "iccid": "89457300000032481957",
+        "msisdn": "882360027454443"
+    },
+    "network_config": {
+        "apn": "onomondo",
+        "preferred_plmn": [
+            "23450"
+        ],
+        "rat_priority": [
+            "LTE-M",
+            "NB-IoT"
+        ],
+        "psm_config": {
+            "enabled": true,
+            "active_time": "10s",
+            "periodic_tau": "24h"
+        },
+        "edrx_config": {
+            "enabled": true,
+            "mode": "LTE-M",
+            "requested_value": "0010"
+        }
+    },
+    "security": {
+        "algorithm": "AES",
+        "key_size": 128,
+        "auth_type": "3G"
+    },
+    "features": {
+        "roaming": true,
+        "sms": true,
+        "voice": false,
+        "data": true
+    },
+    "api_config": {
+        "api_key": "onok_d90a23b7.lp5n7QzS8inO4Jf0pKRSJdMR4WF0Qxtqn3eMZCyPJPwswMCvt/2Ez+YN",
+        "endpoint": "https://api.onomondo.com/v1"
+    }
+}

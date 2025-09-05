@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+"""
+{{ service_display_name }} authenticator for system-wide authentication.
+Auto-generated from CLI token template.
+"""
+
+import os
+from pathlib import Path
+from typing import Optional
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base_authenticator import BaseAuthenticator
+
+class {{ service_class_name }}Authenticator(BaseAuthenticator):
+    """{{ service_display_name }} authenticator using CLI tool."""
+    
+    def __init__(self, credentials: dict):
+        super().__init__("{{ service_id }}", credentials)
+        self.cli_command = "{{ cli_command }}"
+        self.token_env_var = "{{ token_env_var }}"
+        self.required_keys = ["{{ credential_key }}"]
+        self.auth_command = {{ auth_command | tojson }}
+        self.verify_command = {{ verify_command | tojson }}
+        self.logout_command = {{ logout_command | tojson }}
+        
+    def authenticate(self) -> bool:
+        """Authenticate with {{ service_display_name }} using token."""
+        token = self.credentials.get("{{ credential_key }}")
+        
+        if not token:
+            self.logger.error("No {{ service_display_name }} token found in credentials")
+            self.update_status("no_credentials")
+            return False
+        
+        self.logger.info("Setting up {{ service_display_name }} authentication...")
+        
+        # Set environment variable for authentication
+        env = {self.token_env_var: token}
+        
+        # Run authentication command
+        success, stdout, stderr = self.run_command(
+            [self.cli_command] + self.auth_command,
+            env=env,
+            timeout=30
+        )
+        
+        if success:
+            self.update_status("authenticated")
+            self.logger.info(f"✅ {{ service_display_name }} authenticated successfully")
+            {% if update_shell_profile %}
+            # Update shell profile for persistence
+            self._update_shell_profile(self.token_env_var, token)
+            {% endif %}
+            return True
+        else:
+            self.logger.error(f"{{ service_display_name }} authentication failed: {stderr}")
+            self.update_status("failed")
+            return False
+    
+    def verify_auth(self) -> bool:
+        """Verify {{ service_display_name }} authentication status."""
+        # Get token from environment or credentials
+        token = os.environ.get(self.token_env_var)
+        if not token:
+            token = self.credentials.get("{{ credential_key }}")
+        
+        if not token:
+            self.update_status("not_authenticated")
+            return False
+        
+        # Run verification command
+        env = {self.token_env_var: token} if token else None
+        success, stdout, stderr = self.run_command(
+            [self.cli_command] + self.verify_command,
+            env=env,
+            timeout=10
+        )
+        
+        if success:
+            self.update_status("authenticated")
+            return True
+        else:
+            self.update_status("not_authenticated")
+            return False
+    
+    def logout(self) -> bool:
+        """Logout from {{ service_display_name }}."""
+        {% if logout_command %}
+        # Run logout command if provided
+        success, _, _ = self.run_command(
+            [self.cli_command] + self.logout_command,
+            timeout=10
+        )
+        {% endif %}
+        
+        {% if update_shell_profile %}
+        # Remove from shell profiles
+        self._remove_from_shell_profile(self.token_env_var)
+        {% endif %}
+        
+        # Clear from environment
+        if self.token_env_var in os.environ:
+            del os.environ[self.token_env_var]
+        
+        self.update_status("logged_out")
+        self.logger.info("Logged out from {{ service_display_name }}")
+        return True
+    
+    {% if update_shell_profile %}
+    def _update_shell_profile(self, key: str, value: str):
+        """Update shell profile with environment variable."""
+        for profile in [".bashrc", ".zshrc", ".profile"]:
+            profile_path = Path.home() / profile
+            if profile_path.exists():
+                try:
+                    content = profile_path.read_text()
+                    lines = content.split('\n')
+                    lines = [l for l in lines if not l.startswith(f"export {key}=")]
+                    lines.append(f"export {key}='{value}'")
+                    profile_path.write_text('\n'.join(lines))
+                    self.logger.debug(f"Updated {profile} with {key}")
+                except Exception as e:
+                    self.logger.warning(f"Could not update {profile}: {e}")
+    
+    def _remove_from_shell_profile(self, key: str):
+        """Remove environment variable from shell profiles."""
+        for profile in [".bashrc", ".zshrc", ".profile"]:
+            profile_path = Path.home() / profile
+            if profile_path.exists():
+                try:
+                    content = profile_path.read_text()
+                    lines = content.split('\n')
+                    lines = [l for l in lines if not l.startswith(f"export {key}=")]
+                    profile_path.write_text('\n'.join(lines))
+                    self.logger.debug(f"Removed {key} from {profile}")
+                except Exception as e:
+                    self.logger.warning(f"Could not update {profile}: {e}")
+    {% endif %}

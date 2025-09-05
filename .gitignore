@@ -1,0 +1,85 @@
+# Build artifacts
+build/
+*.build/
+_build/
+**/build*/
+
+# Nordic SDK/Zephyr specific
+.west/
+modules/
+bootloader/
+tools/
+zephyr/
+nrf/
+nrfxlib/
+test/
+mbedtls/
+
+# Binary and hex files
+*.hex
+*.bin
+*.elf
+*.map
+*.exe
+
+# Object files
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+.env
+
+# Logs and debugging
+*.log
+*.jlink
+*.rtt
+trace.txt
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# Credentials and secrets
+*.pem
+*.key
+*.cert
+credentials/
+secrets/
+
+# Documentation build
+docs/_build/
+*.pdf
+
+# Project specific
+softsim_profiles/
+decrypted_profiles/
+*.decrypted
+COM*.txt
+monitor_*.txt
+
+# Keep configuration templates
+!prj.conf.template
+!west.yml.template

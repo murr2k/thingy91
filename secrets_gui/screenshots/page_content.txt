@@ -1,0 +1,171 @@
+Page URL: http://localhost:5000/
+Page Title: Login - Secrets Manager
+----------------------------------------
+Connected
+🔐 Secrets Manager
+➕ New Service
+↻ Refresh
+Logout
+📡
+Onomondo
+○ Not Configured
+Not configured
+KEY
+IMSI
+ICCID
+☁️
+AWS
+○ Not Configured
+Not configured
+ID
+KEY
+REGION
+☁️
+Azure
+○ Not Configured
+Not configured
+ID
+SECRET
+ID
+🗄️
+Database
+○ Not Configured
+Not configured
+HOST
+PORT
+NAME
+USER
+PASSWORD
+⚡
+Redis
+○ Not Configured
+Not configured
+HOST
+PORT
+PASSWORD
+💳
+Stripe
+○ Not Configured
+Not configured
+KEY
+KEY
+🤖
+OpenAI
+○ Not Configured
+Not configured
+KEY
+ORGANIZATION
+🐙
+GitHub CLI
+Checking...
+TOKEN
+USERNAME
+EMAIL
+🔐 Authenticate CLI
+🚀
+Fly.io
+Checking...
+TOKEN
+TOKEN
+TOKEN
+ORG
+🔐 Authenticate CLI
+📦
+NPM Registry
+Checking...
+TOKEN
+USERNAME
+EMAIL
+🔐 Authenticate CLI
+📊
+Grafana
+Checking...
+TOKEN
+URL
+ID
+🎮
+Google Play
+Checking...
+ACCOUNT
+NAME
+🔧
+MacroFab
+Checking...
+KEY
+SECRET
+☁️
+Cloudflare
+Checking...
+EMAIL
+KEY
+ID
+🔐 Authenticate CLI
+🔌
+Nexar
+Checking...
+ID
+SECRET
+TOKEN
+🏗️
+Terraform Cloud
+Checking...
+TOKEN
+ORG
+WORKSPACE
+🔐 Authenticate CLI
+🔐
+Infisical
+Checking...
+TOKEN
+ID
+ENV
+📟
+DigiKey
+Checking...
+ID
+SECRET
+TOKEN
+TOKEN
+ENVIRONMENT
+📱
+Blynk
+Checking...
+TOKEN
+ID
+NAME
+NAME
+🤖
+Anthropic
+Checking...
+KEY
+MODEL
+💬
+Slack
+Checking...
+TOKEN
+URL
+CHANNEL
+TOKEN
+🤖
+Edge Impulse
+Checking...
+KEY
+KEY
+ID
+📅
+Cal.com
+Checking...
+KEY
+SECRET
+🧮
+Wolfram Alpha
+Checking...
+ID
+KEY
+📟
+DigiKey Production
+Checking...
+ID
+SECRET
+TOKEN
+TOKEN

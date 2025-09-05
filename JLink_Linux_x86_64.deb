@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<!-- 
+	made with <3 by Marketing Factory Digital GmbH
+
+	This website is powered by TYPO3 - inspiring people to share!
+	TYPO3 is a free open source Content Management Framework initially created by Kasper Skaarhoj and licensed under GNU/GPL.
+	TYPO3 is copyright 1998-2025 of Kasper Skaarhoj. Extensions are copyright of their respective owners.
+	Information and contribution at https://typo3.org/
+-->
+
+
+<link rel="icon" href="/_assets/a56f34e9c85695fa4c890b2909010dbd/Icons/favicon.ico" type="image/vnd.microsoft.icon">
+<title>SEGGER - The Embedded Experts - Downloads</title>
+<meta http-equiv="x-ua-compatible" content="IE=edge">
+<meta name="generator" content="TYPO3 CMS">
+<meta name="description" content="Download the latest SEGGER trial versions, eval packages and user manuals!">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="robots" content="noindex,follow" />
+<meta name="twitter:card" content="summary">
+<meta name="apple-mobile-web-app-capable" content="no">
+<meta name="google" content="notranslate">
+
+
+<link rel="stylesheet" href="/frontend/segger-corporate/Css/segger.6e20325f.css?1756815064" media="all">
+
+
+
+
+
+
+<link rel="prev" href="/evaluate-our-software/"><link rel="next" href="/free-utilities/"><link rel="profile" href="http://a9.com/-/spec/opensearch/1.1/" />
+			<link rel="search"
+				  type="application/opensearchdescription+xml"
+				  href="https://www.segger.com/?type=7567"
+				  title="Website Search"
+			/>
+
+
+
+
+
+<script>if(typeof _paq==="undefined"||!(_paq instanceof Array))var _paq=[];_paq.push(["disableCookies"]);_paq.push(["setDoNotTrack",true]);_paq.push(["trackPageView"]);_paq.push(["enableLinkTracking"]);_paq.push(["trackAllContentImpressions"]);_paq.push(["trackVisibleContentImpressions"]);(function(){var u="https://t.segger.com/";_paq.push(["setTrackerUrl",u+"matomo.php"]);_paq.push(["setSiteId",15]);var d=document,g=d.createElement("script"),s=d.getElementsByTagName("script")[0];g.async=true;g.src=u+"matomo.js";s.parentNode.insertBefore(g,s);})();</script>
+<!-- This site is optimized with the Yoast SEO for TYPO3 plugin - https://yoast.com/typo3-extensions-seo/ -->
+<script type="application/ld+json">[{"@context":"https:\/\/www.schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/www.segger.com\/","name":"SEGGER - The Embedded Experts"}},{"@type":"ListItem","position":2,"item":{"@id":"https:\/\/www.segger.com\/downloads\/","name":"Downloads"}}]}]</script>
+<link rel="alternate" hreflang="en-US" href="https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb" />
+<link rel="alternate" hreflang="en-CN" href="https://www.segger.cn/downloads/jlink/JLink_Linux_x86_64.deb" />
+<link rel="alternate" hreflang="x-default" href="https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb" />
+<link rel="canonical" href="https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb" />
+</head>
+<body id="p148" class="backendlayout-1_col_anchor_nav layout-default downloads c-productpage--" data-client-country="DE">
+
+<div id="top"></div><div class="outer-wrap"><div class="inner-wrap body-bg " id="page"><div id="cookieconsent"><span data-cookieconsent-setting="cookie.expiryDays" data-cookieconsent-value="365"></span><span data-cookieconsent-setting="content.header" data-cookieconsent-value="Cookies used on the website!"></span><span data-cookieconsent-setting="content.message" data-cookieconsent-value="This website uses only essential cookies. It does not employ tracking, analysis, advertising or other non-essential cookies."></span><span data-cookieconsent-setting="content.dismiss" data-cookieconsent-value="I understand"></span><span data-cookieconsent-setting="content.allow" data-cookieconsent-value="Allow cookies"></span><span data-cookieconsent-setting="content.deny" data-cookieconsent-value="Decline"></span><span data-cookieconsent-setting="content.link" data-cookieconsent-value="Our policy"></span><span data-cookieconsent-setting="content.href" data-cookieconsent-value="/downloads/pub/PrivacyPolicy.pdf"></span><span data-cookieconsent-setting="layout" data-cookieconsent-value="basic"></span><span data-cookieconsent-setting="type" data-cookieconsent-value="info"></span><span data-cookieconsent-setting="position" data-cookieconsent-value="bottom"></span><span data-cookieconsent-setting="revokable" data-cookieconsent-value="0"></span><span data-cookieconsent-setting="static" data-cookieconsent-value="0"></span><span data-cookieconsent-setting="location" data-cookieconsent-value="0"></span><span data-cookieconsent-setting="law.countryCode" data-cookieconsent-value=""></span><span data-cookieconsent-setting="law.regionalLaw" data-cookieconsent-value="1"></span></div><header id="page-header" class="page-header"><div class="page-header-bg"><div class="o-container page-header-wrap"><div class="page-header-flex-container page-header-nav-wrap"><a class="u-hidden-visually-focusable c-skip-to-content" href="#page-content"><span>Skip to main content</span></a><div class="mainnav-container"><div class="mainnav-button"><span class="mainnav-icon"><i class="fa fa-bars mainnav-icon-closed"></i><i class="fa fa-times mainnav-icon-opened"></i></span></div><nav class="mainnav" role="navigation" data-mobile="/?type=350" data-desktop="/?type=361"><ul class="o-nav mainnav-list"><li class="mainnav-backlink is--mobile-only"><button data-home="SEGGER - Software Development Tools for Embedded Systems">SEGGER - Software
+                        Development Tools for Embedded Systems
+                    </button></li><li class="mainnav-link" data-page="146"><span class="mainnav-item-text">Products</span><button class="mainnav-show-more"></button></li><li class="mainnav-link is--mobile-only" data-page="2470"><a class="mainnav-item-text" href="/evaluate-our-software/"  title="Evaluate our Software">
+                                            Evaluate our Software
+                                        </a><button class="mainnav-show-more"></button></li><li class="mainnav-link" data-page="148"><span class="mainnav-item-text">Downloads</span><button class="mainnav-show-more"></button></li><li class="mainnav-link is--mobile-only" data-page="895"><a class="mainnav-item-text" href="/free-utilities/"  title="Free Utilities">
+                                            Free Utilities
+                                        </a><button class="mainnav-show-more"></button></li><li class="mainnav-link" data-page="149"><span class="mainnav-item-text">Purchase</span><button class="mainnav-show-more"></button></li><li class="mainnav-link is--mobile-only" data-page="3539"><a class="mainnav-item-text" href="/silicon-vendor/"  title="Silicon Vendors">
+                                            Silicon Vendors
+                                        </a><button class="mainnav-show-more"></button></li><li class="mainnav-link" data-page="158"><span class="mainnav-item-text">Support</span><button class="mainnav-show-more"></button></li><li class="mainnav-link" data-page="159"><span class="mainnav-item-text">About Us</span><button class="mainnav-show-more"></button></li><li class="mainnav-link is--mobile-only" data-page="2131"><a class="mainnav-item-text" href="https://blog.segger.com/"  title="Blog">
+                                            Blog
+                                        </a><button class="mainnav-show-more"></button></li><li class="mainnav-link is--mobile-only" data-page="2130"><a class="mainnav-item-text" href="https://forum.segger.com/"  title="Forum">
+                                            Forum
+                                        </a><button class="mainnav-show-more"></button></li><li class="mainnav-link is--mobile-only" data-page="1281"><a class="mainnav-item-text" href="/search-results/"  title="Search">
+                                            Search
+                                        </a><button class="mainnav-show-more"></button></li></ul></nav></div><div class="secondary-nav"><ul class="o-nav"><li><button class="js_search-toggler searchbar-toggler" title="Search Our Site"><i class="fa fa-search"></i></button></li><li><a href="/about-us/job-offers/" title="Join Our Team!"><span class="secondary-nav__label">Jobs</span></a></li><li><a href="https://www.segger.com/notification/subscribe_nl.php?prodid=140"
+                       title="Subscribe to Our Newsletter!"
+                       class="lightbox-content"
+                       data-fancybox-class="fancybox-container--light notifications-modal"><span>Newsletter</span></a></li><li><a href="https://blog.segger.com/" title="See What Is Cooking at SEGGER"><span>Blog</span></a></li><li class="u-hide-until@md"><a href="/about-us/contact-us/" title="Contact us!"><span>Contact</span></a></li><li><a href="/shop" title="Purchase through The SEGGER Web Shop">Shop</a></li></ul></div></div><div class="o-container page-header-flex-container page-header-logo-wrap"><a class="page-header-logo" href="/"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="50px" height="25px" viewBox="0 0 260 130" class="" aria-hidden="true"><style type="text/css">
+        .border { fill:#010000; }
+        .background { fill:#FFFFFF; }
+        .beam { fill:#005CA8; }
+        .letters { fill:#010000; }
+    </style><path class="background" d="M257.3,119.2c0,4.5-3.4,8.1-7.6,8.1H10.3c-4.2,0-7.6-3.6-7.6-8.1V10.8c0-4.5,3.4-8.1,7.6-8.1h239.4 c4.2,0,7.6,3.6,7.6,8.1"/><path class="border" d="M249.7,130H10.3C4.6,130,0,125.1,0,119.2V10.8C0,4.8,4.6,0,10.3,0h239.4c5.7,0,10.3,4.8,10.3,10.8v108.4 C260,125.1,255.4,130,249.7,130z M10.3,5.4c-2.7,0-4.9,2.4-4.9,5.4v108.4c0,3,2.2,5.4,4.9,5.4h239.4c2.7,0,4.9-2.4,4.9-5.4V10.8 c0-3-2.2-5.4-4.9-5.4H10.3z"/><g class="beam"><polygon points="13.6,43.3 29.8,65 13.6,86.6"/><path d="M37.6,24l27.1,35.2l0,0.2c0.7,0.9,1.8,1.7,3,1.7h173.3c2.1,0,3.8-1.9,3.8-4s-1.7-4-3.8-4H69.6L43.7,19.3l0,0 c-0.7-0.9-1.8-1.5-3-1.5c-2.1,0-3.8,1.7-3.8,3.8C36.9,22.5,37.2,23.3,37.6,24L37.6,24z"/><path d="M52.8,67.4c0.5-0.7,0.9-1.5,0.9-2.4s-0.3-1.7-0.9-2.4L20.4,19.4h0c-0.7-0.9-1.8-1.5-3-1.5 c-2.1,0-3.8,1.7-3.8,3.8c0,0.9,0.4,1.8,0.9,2.5L45.1,65l-30.7,40.9c-0.6,0.7-0.9,1.5-0.9,2.5c0,2.1,1.7,3.8,3.8,3.8 c1.2,0,2.3-0.6,3-1.5l0,0L52.8,67.4z"/><path d="M241.1,69H67.7c-1.2,0-2.3,0.7-3,1.7l0,0.1L37.6,106l0,0c-0.5,0.6-0.8,1.4-0.8,2.3c0,2.1,1.7,3.8,3.8,3.8 c1.2,0,2.3-0.6,3-1.5l0,0.1L69.6,77h171.5c2.1,0,3.8-1.9,3.8-4S243.1,69,241.1,69z"/></g><g class="letters"><path d="M92.1,92.4c0,0.7-0.2,1.3-0.7,1.7c-0.5,0.4-1.2,0.6-2,0.6c-1,0-2.1-0.6-3.1-1.7c-0.3-0.3-0.5-0.5-0.6-0.6 c-0.5-0.5-1.2-0.9-2-1.2c-0.8-0.2-1.8-0.4-2.9-0.4c-1.6,0-2.8,0.3-3.7,0.8c-0.9,0.6-1.3,1.3-1.3,2.3c0,1.3,1.7,2.3,5.1,3 c0.8,0.2,1.5,0.3,1.9,0.4c2.1,0.4,3.7,0.8,4.7,1.1c1,0.3,1.8,0.6,2.6,0.9c1.2,0.6,2.1,1.4,2.8,2.3c0.6,1,0.9,2.1,0.9,3.5 c0,2.5-1,4.5-3.1,5.9c-2.1,1.5-4.9,2.2-8.5,2.2c-2,0-3.6-0.2-5-0.5c-1.4-0.4-2.8-0.9-4.1-1.7c-0.9-0.5-1.6-1.2-2.1-2 c-0.5-0.8-0.8-1.5-0.8-2.2c0-0.7,0.2-1.3,0.7-1.8c0.5-0.5,1.2-0.7,2-0.7c1.1,0,2.1,0.6,3,1.8c0.4,0.5,0.6,0.8,0.9,1 c0.6,0.6,1.3,1.1,2.2,1.4c0.9,0.3,1.9,0.4,3.1,0.4c1.9,0,3.3-0.3,4.3-0.8c1-0.6,1.5-1.4,1.5-2.4c0-1.5-2.5-2.8-7.5-3.7 c-0.2,0-0.3-0.1-0.4-0.1c-3.9-0.7-6.5-1.7-7.8-2.8c-1.4-1.1-2-2.7-2-4.8c0-2.4,1-4.3,3-5.6c2-1.3,4.8-2,8.3-2 c1.7,0,3.1,0.2,4.5,0.5c1.3,0.3,2.6,0.8,3.6,1.5c0.9,0.5,1.5,1.1,2.1,1.8C91.8,91.1,92.1,91.8,92.1,92.4z"/><path d="M117.9,107.9c1.1,0,2,0.2,2.5,0.6c0.6,0.4,0.8,1,0.8,1.7s-0.3,1.3-0.9,1.7c-0.6,0.4-1.4,0.6-2.5,0.6h-15.7 c-1.4,0-2.4-0.3-2.9-0.9c-0.6-0.6-0.8-1.6-0.8-3.1V91.3c0-1.6,0.2-2.6,0.8-3.2c0.6-0.6,1.5-0.8,2.9-0.8h15c1.1,0,1.9,0.2,2.5,0.6 c0.6,0.4,0.8,0.9,0.8,1.7c0,0.7-0.3,1.2-0.8,1.6c-0.6,0.4-1.4,0.5-2.5,0.5h-12.6v5.4h11.3c1.1,0,1.9,0.2,2.5,0.5 c0.5,0.4,0.8,0.9,0.8,1.7c0,0.7-0.3,1.2-0.8,1.6c-0.6,0.4-1.4,0.6-2.4,0.6h-11.3v6.5H117.9z"/><path d="M146.3,103.2h-4.6c-0.8,0-1.4-0.2-1.9-0.6c-0.5-0.4-0.7-0.9-0.7-1.6c0-0.6,0.2-1.2,0.7-1.5 c0.5-0.4,1.1-0.6,1.9-0.6h6.6c1.3,0,2.3,0.2,2.8,0.6c0.5,0.4,0.8,1,0.8,1.8v9.7c0,0.8-0.2,1.3-0.5,1.7c-0.4,0.4-0.9,0.6-1.6,0.6 c-0.6,0-1.1-0.2-1.5-0.4c-0.4-0.3-0.7-0.7-0.8-1.3l-0.5-1.9c-1.1,1.3-2.4,2.2-3.8,2.8c-1.4,0.6-3,0.9-4.9,0.9 c-4.2,0-7.6-1.2-10.1-3.7c-2.6-2.4-3.9-5.7-3.9-9.7c0-4,1.3-7.3,3.9-9.7c2.6-2.4,6-3.6,10.3-3.6c1.4,0,2.7,0.1,3.9,0.4 c1.2,0.2,2.4,0.6,3.4,1c1.5,0.7,2.6,1.4,3.4,2.2c0.8,0.8,1.2,1.7,1.2,2.5c0,0.7-0.3,1.3-0.8,1.8c-0.5,0.5-1.1,0.7-1.9,0.7 c-0.7,0-1.2-0.1-1.7-0.4c-0.5-0.2-1-0.7-1.7-1.4c-0.8-0.9-1.7-1.5-2.5-1.9c-0.9-0.4-1.9-0.6-3.1-0.6c-2.5,0-4.5,0.8-5.9,2.3 c-1.4,1.6-2.1,3.7-2.1,6.5c0,2.7,0.7,4.9,2.2,6.4c1.5,1.6,3.6,2.3,6.1,2.3c2,0,3.6-0.5,4.9-1.5 C145.1,106.3,145.9,104.9,146.3,103.2z"/><path d="M178.4,103.2h-4.6c-0.8,0-1.4-0.2-1.9-0.6c-0.5-0.4-0.7-0.9-0.7-1.6c0-0.6,0.2-1.2,0.7-1.5 c0.5-0.4,1.1-0.6,1.9-0.6h6.6c1.3,0,2.2,0.2,2.8,0.6c0.5,0.4,0.8,1,0.8,1.8v9.7c0,0.8-0.2,1.3-0.5,1.7c-0.4,0.4-0.9,0.6-1.7,0.6 c-0.6,0-1.1-0.2-1.5-0.4c-0.4-0.3-0.6-0.7-0.8-1.3l-0.5-1.9c-1.1,1.3-2.4,2.2-3.8,2.8c-1.4,0.6-3.1,0.9-5,0.9 c-4.2,0-7.6-1.2-10.2-3.7c-2.6-2.4-3.9-5.7-3.9-9.7c0-4,1.3-7.3,3.9-9.7c2.6-2.4,6-3.6,10.3-3.6c1.4,0,2.7,0.1,3.9,0.4 c1.2,0.2,2.4,0.6,3.4,1c1.5,0.7,2.6,1.4,3.4,2.2c0.8,0.8,1.2,1.7,1.2,2.5c0,0.7-0.2,1.3-0.8,1.8c-0.5,0.5-1.2,0.7-1.9,0.7 c-0.6,0-1.2-0.1-1.7-0.4c-0.5-0.2-1-0.7-1.8-1.4c-0.8-0.9-1.6-1.5-2.5-1.9c-0.9-0.4-1.9-0.6-3.1-0.6c-2.5,0-4.5,0.8-5.9,2.3 c-1.4,1.6-2.1,3.7-2.1,6.5c0,2.7,0.7,4.9,2.2,6.4c1.5,1.6,3.5,2.3,6.1,2.3c1.9,0,3.6-0.5,4.9-1.5 C177.3,106.3,178.1,104.9,178.4,103.2z"/><path d="M209.4,107.9c1.1,0,2,0.2,2.5,0.6c0.6,0.4,0.8,1,0.8,1.7s-0.3,1.3-0.9,1.7c-0.6,0.4-1.4,0.6-2.5,0.6h-15.7 c-1.4,0-2.4-0.3-2.9-0.9c-0.5-0.6-0.8-1.6-0.8-3.1V91.3c0-1.6,0.3-2.6,0.8-3.2c0.5-0.6,1.5-0.8,2.9-0.8h14.9c1.1,0,1.9,0.2,2.5,0.6 c0.6,0.4,0.8,0.9,0.8,1.7c0,0.7-0.3,1.2-0.8,1.6c-0.6,0.4-1.4,0.5-2.5,0.5H196v5.4h11.4c1.1,0,1.9,0.2,2.4,0.5 c0.6,0.4,0.8,0.9,0.8,1.7c0,0.7-0.3,1.2-0.8,1.6c-0.6,0.4-1.4,0.6-2.4,0.6H196v6.5H209.4z"/><path d="M223.1,91.7v6.7h7.2c1.6,0,2.7-0.3,3.4-0.8c0.7-0.5,1.1-1.4,1.1-2.5c0-1.1-0.4-1.9-1.1-2.5 c-0.7-0.6-1.8-0.9-3.2-0.9H223.1L223.1,91.7z M223.1,110.1c0,0.9-0.2,1.6-0.8,2.1c-0.5,0.5-1.3,0.7-2.3,0.7c-1,0-1.8-0.2-2.3-0.7 c-0.5-0.5-0.8-1.2-0.8-2.1V91.3c0-1.6,0.3-2.6,0.8-3.2c0.6-0.6,1.5-0.8,2.9-0.8h10.7c3.3,0,5.7,0.6,7.2,1.8c1.6,1.2,2.4,3,2.4,5.4 c0,1.5-0.4,2.8-1.2,3.9c-0.8,1-1.9,1.7-3.3,2.1c1.1,0.3,2,0.8,2.6,1.5s0.9,1.6,1,2.8c0.1,0.5,0.1,1.1,0.1,1.8 c0,0.8,0.1,1.3,0.1,1.5c0.1,0.3,0.2,0.7,0.3,1.3c0.1,0.6,0.2,1,0.2,1.2c0,0.7-0.3,1.3-0.8,1.7c-0.6,0.4-1.3,0.6-2.2,0.6 c-1.3,0-2.2-0.3-2.8-0.9c-0.5-0.6-0.9-2.2-1.1-4.8c-0.1-2-0.6-3.3-1.2-3.8c-0.6-0.5-1.7-0.7-3.3-0.7h-6.5V110.1z"/></g></svg></a></div></div></div><div class="page-header-flex-container"><div id="header-search" class="page-header-search-wrap"><div class="o-container page-header-search-form"><form method="get" id="tx-solr-search-form-pi-results-header" action="/search-results/" data-suggest="/search-results/suggest" data-suggest-header="" accept-charset="utf-8"><label class="u-hidden-visually" for="headerSearchField">Search term</label><input id="headerSearchField" type="text" class="tx-solr-q js-solr-q tx-solr-suggest tx-solr-suggest-focus" name="tx_solr[q]" value="" placeholder="What would you like to search for?" /></form></div></div></div></header><main class="c-pagesection-main" id="content"><div id="page-content" class="bp-page-content main-section"><!--TYPO3SEARCH_begin--><div id="productheader" class="c-pagesection-header"><div id="c60937" class="frame frame-default frame-type-keyvisual frame-layout-0 frame-background-none  frame-has-backgroundimage anchor-offset frame-space-after-default "><div class="frame-backgroundimage-container"><div id="frame-backgroundimage-60937" class="frame-backgroundimage"><style>
+                #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_639343bf7e.webp'); } @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) { #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_d696e52ff7.webp'); } } @media (min-width: 576px) { #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_0864e844a5.webp'); } } @media (-webkit-min-device-pixel-ratio: 2) and (min-width: 576px), (min-resolution: 2dppx) and (min-width: 576px) { #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_66b1d38112.webp'); } } @media (min-width: 768px) { #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_8d609fba59.webp'); } } @media (-webkit-min-device-pixel-ratio: 2) and (min-width: 768px), (min-resolution: 2dppx) and (min-width: 768px) { #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_f1105b8c62.webp'); } } @media (min-width: 992px) { #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_525478f057.webp'); } } @media (-webkit-min-device-pixel-ratio: 2) and (min-width: 992px), (min-resolution: 2dppx) and (min-width: 992px) { #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_004498f50e.webp'); } } @media (min-width: 1200px) { #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_ffe9d74bd9.webp'); } } @media (-webkit-min-device-pixel-ratio: 2) and (min-width: 1200px), (min-resolution: 2dppx) and (min-width: 1200px) { #frame-backgroundimage-60937 { background-image: url('/fileadmin/_processed_/2/e/csm_header-download_243d493402.webp'); } } 
+            </style></div></div><div class="frame-container"><div class="frame-inner"><div class="o-grid o-grid--keyvisual mfc_keyvisualMinHeight"><div class="o-grid__col-12 o-grid__col-5@md o-grid__col-4@lg"><div class="gallery-item gallery-item-size-1"><figure class="image"><picture><source data-variant="default" data-maxwidth="350" media="(min-width: 1200px)" srcset="/fileadmin/_processed_/a/7/csm_height_100_1135717cf8.webp" type="image/webp"><source data-variant="large" data-maxwidth="300" media="(min-width: 992px)" srcset="/fileadmin/_processed_/a/7/csm_height_100_3ff13a2541.webp" type="image/webp"><source data-variant="medium" data-maxwidth="248" media="(min-width: 768px)" srcset="/fileadmin/_processed_/a/7/csm_height_100_2ca9388258.webp" type="image/webp"><source data-variant="small" data-maxwidth="308" media="(min-width: 576px)" srcset="/fileadmin/_processed_/a/7/csm_height_100_753953cd32.webp" type="image/webp"><source data-variant="extrasmall" data-maxwidth="519"  srcset="/fileadmin/_processed_/a/7/csm_height_100_2dac296ece.webp" type="image/webp"><img loading="lazy" src="/fileadmin/_processed_/a/7/csm_height_100_1135717cf8.webp"
+                 width="1" height="100"
+                 title="" alt="height_100"></picture></figure></div></div><div class="o-grid__col-12 o-grid__col-6@md"><div
+        class="textpic-item textpic-text mfc_keyvisual-textbg"><div class="mfc_keyvisualLinkblock mfc_keyvisualLink u-clearfix"></div></div></div></div></div></div></div></div><main class=""><div class="section c-pagesection-pre-anchor"><div class=""><div class="o-container"><div id="c24186" class="frame frame-default frame-type-html frame-layout-0  frame-background-none  frame-no-backgroundimage anchor-offset frame-space-after-default "><div class="frame-container"><div class="frame-inner">
+                            
+                            
+                            
+
+    
+
+
+                        </div></div></div></div></div></div><div class="section c-pagesection-anchored"><div class="o-container"><div id="c4957" class="frame frame-default frame-type-html frame-layout-0  frame-background-none  frame-no-backgroundimage anchor-offset frame-space-after-default "><div class="frame-container"><div class="frame-inner">
+                            
+                            
+                            
+
+    <div class="downloads"><div class="TableDarkGrey"><h1>SEGGER Downloads</h1><h2>Terms of Use</h2><textarea class="readonly" style="width:100%; height:480px;" readonly="readonly">By accessing and using Software and Materials provided by SEGGER as free download, you acknowledge and agree to the following Terms of Use. If you do not agree to these Terms, do not download or use any Software or Material.
+
+1) You agree that you will not use the Software or Material for any purpose that is unlawful or illegal.
+2) You agree to use the Software only in accordance with the license regulations included in the Software.
+3) You acknowledge that the Software and Material is provided by SEGGER on "as is" basis without any express or implied warranty of any kind.
+4) You confirm that you are not a person, entity or organization designated by the European Community as a terrorist, terror organization or entity pursuant to the applicable European Council Regulations.
+5) You confirm that you are not located in a prohibited or embargoed country and confirm that you will not ship, distribute, transfer and/or export our Software or Material to any prohibited or embargoed country as mentioned in any such European Union law or regulation.
+
+Further information with regard to the listed persons, entities and organizations can be obtained from the official EU website. If there is any doubt if you are on this list it is strongly recommended to review such lists or get in touch with SEGGER prior download of any Software or Material.
+
+Copyright (c) SEGGER Microcontroller GmbH</textarea><br><br><form method="post" action="/downloads/jlink/JLink_Linux_x86_64.deb"><label><input type="checkbox" name="accept_license_agreement" value="accepted" style="vertical-align:middle;"> &nbsp;&nbsp;I accept these Terms of Use.</label><br><br><input name="submit" type="submit" value="Download software" style="float:left;"></form><form action="" >  <input style="float:left; margin-left:20px;" type="submit" value="Back" onclick="history.back(); return false"></form></div></div><p>&nbsp;</p><p>&nbsp;</p>
+
+
+                        </div></div></div></div></div></main><!--TYPO3SEARCH_end--></div></main><footer id="page-footer" class="c-page-footer"><div class="c-page-footer__address"><div class="o-container"><div class="o-grid u-gap-row-large"><div class="o-grid__col-12 o-grid__col-6@sm o-grid__col-3@md"><div><p class="c-page-footer__header h3">
+                        Headquarters
+                    </p><div class="c-page-footer__address-details"><p><strong>SEGGER Microcontroller GmbH</strong></p><p>Ecolab-Allee 5<br> 40789 Monheim am Rhein, Germany<br><a
+                                    href="https://www.segger.com/about-us/contact-us/">info@segger.com</a><br>
+                                    Tel.: +49-2173-99312-0<br> Fax: +49-2173-99312-28</p></div><div class="c-page-footer__social-media"><a href="https://www.youtube.com/user/SeggerMicro"
+                                   title="Follow us on YouTube" target="_blank"><img src="/_assets/a56f34e9c85695fa4c890b2909010dbd/Images/icon-youtube-x42.png"
+                                         alt="" aria-hidden="true"></a><a href="https://www.linkedin.com/company/segger-microcontroller"
+                                   title="Follow us on LinkedIn" target="_blank"
+                                   class="c-page-footer__social-media--linkedin"><img src="/_assets/a56f34e9c85695fa4c890b2909010dbd/Images/icon-linkedin-x42.png"
+                                         alt="" aria-hidden="true"></a><a href="https://www.segger.com/rss.xml"
+                                   title="Subscribe to our RSS Feed" target="_blank"><img src="/_assets/a56f34e9c85695fa4c890b2909010dbd/Images/icon-rss.svg"
+                                         alt="" aria-hidden="true" width="47" height="47"></a></div></div></div><div class="o-grid__col-12 o-grid__col-6@sm o-grid__col-3@md"><div><p class="c-page-footer__header h3">Locations</p><div class="c-page-footer__address"><p><strong>USA: SEGGER Microcontroller Systems LLC</strong></p><p>Boston area<br/>
+                                    101 Suffolk Lane<br/>
+                                    Gardner, MA 01440, USA<br/><a href="mailto:us-east@segger.com">us-east@segger.com</a><br/>
+                                    Tel.: +1-978-874-0299<br/>
+                                    Fax: +1-978-874-0599</p><p>Silicon Valley<br/>
+                                    Milpitas, CA 95035, USA<br/><a href="mailto:us-west@segger.com">us-west@segger.com</a><br/>
+                                    Tel.: +1-408-767-4068</p><p><strong>China: SEGGER Microcontroller China Co., Ltd.</strong></p><p>Room 218, Block A, Dahongqiaoguoji<br/>
+                                    No. 133 Xiulian Road<br/>
+                                    Minhang District, Shanghai 201199, China<br/><a href="mailto:china@segger.com">china@segger.com</a><br/>
+                                    Tel.: +86-133-619-907-60</p></div></div></div><div class="o-grid__col-12 o-grid__col-6@sm o-grid__col-3@md"><div><p class="c-page-footer__header h3 text-center">
+                        ISO 9001 certified
+                    </p><figure><a href="/about-us/quality-management/" title="Quality management at SEGGER"><img src="/_assets/a56f34e9c85695fa4c890b2909010dbd/Images/certificates/iso9001.svg" alt="ISO 9001"></a></figure></div></div><div class="o-grid__col-12 o-grid__col-6@sm o-grid__col-3@md"><div><p class="c-page-footer__header h3 text-center">
+                        30+ years of experience
+                    </p><figure><a href="/about-us/company/" title="First-class embedded software tools since 1992"><img src="/_assets/a56f34e9c85695fa4c890b2909010dbd/Images/certificates/embedded-experts-since1992-grey.svg"
+                                alt="First-class embedded software tools since 1992"></a></figure></div></div></div></div></div><div class="c-page-footer__meta"><div class="o-container"><div class="c-page-footer__meta-content"><nav><ul class="o-nav c-nav-footer"><li class="c-nav-footer__item"><a class="c-nav-footer__link" href="/legal/imprint/">Imprint</a></li><li class="c-nav-footer__item"><a class="c-nav-footer__link" href="/legal/disclaimer/">Disclaimer</a></li><li class="c-nav-footer__item"><a class="c-nav-footer__link" href="/fileadmin/documents/SEGGER_CoC.pdf">Code of Conduct</a></li><li class="c-nav-footer__item"><a class="c-nav-footer__link" href="/downloads/pub/PrivacyPolicy.pdf">Privacy Policy</a></li></ul></nav><div class="c-page-footer-copyright"><a href="/">
+                    &copy; 2025 SEGGER - All rights reserved.
+                </a></div></div></div></div></footer></div></div><a class="c-scroll-top" title="" href="#top"><span class="c-scroll-top__icon"></span></a>
+
+<script src="/frontend/segger-corporate/JavaScript/footer.a2d5d0b7.js?1756815064"></script>
+
+
+</body>
+</html><!-- Frame cache at 1756829562-->

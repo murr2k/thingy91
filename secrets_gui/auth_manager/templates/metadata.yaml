@@ -1,0 +1,169 @@
+templates:
+  cli_token:
+    name: "CLI with Token"
+    description: "For command-line tools that accept tokens via environment variables"
+    icon: "🔧"
+    required_fields:
+      - name: cli_command
+        label: "CLI Command"
+        type: text
+        placeholder: "e.g., vercel, netlify, heroku"
+        help: "The command to run the CLI tool"
+      - name: token_env_var
+        label: "Token Environment Variable"
+        type: text
+        placeholder: "e.g., VERCEL_TOKEN, NETLIFY_AUTH_TOKEN"
+        help: "Environment variable name for the token"
+      - name: credential_key
+        label: "Credential Key"
+        type: text
+        placeholder: "e.g., VERCEL_AUTH_TOKEN"
+        help: "Key name in the secrets store"
+      - name: auth_command
+        label: "Authentication Command"
+        type: json
+        default: '["auth", "login", "--token", "$TOKEN"]'
+        help: "CLI arguments for authentication (use $TOKEN as placeholder)"
+      - name: verify_command
+        label: "Verification Command"
+        type: json
+        default: '["auth", "whoami"]'
+        help: "CLI arguments to verify authentication"
+    optional_fields:
+      - name: logout_command
+        label: "Logout Command"
+        type: json
+        default: '["auth", "logout"]'
+        help: "CLI arguments to logout (optional)"
+      - name: update_shell_profile
+        label: "Update Shell Profile"
+        type: boolean
+        default: true
+        help: "Save token to shell profile for persistence"
+    examples:
+      - name: "Vercel CLI"
+        values:
+          cli_command: "vercel"
+          token_env_var: "VERCEL_TOKEN"
+          credential_key: "VERCEL_AUTH_TOKEN"
+          auth_command: ["--token", "$TOKEN", "whoami"]
+          verify_command: ["whoami"]
+      - name: "Netlify CLI"
+        values:
+          cli_command: "netlify"
+          token_env_var: "NETLIFY_AUTH_TOKEN"
+          credential_key: "NETLIFY_TOKEN"
+          auth_command: ["login", "--auth", "$TOKEN"]
+          verify_command: ["status"]
+
+  api_key:
+    name: "API with Key"
+    description: "For REST APIs with key-based authentication"
+    icon: "🔑"
+    required_fields:
+      - name: api_endpoint
+        label: "API Base URL"
+        type: url
+        placeholder: "e.g., https://api.openai.com/v1"
+        help: "Base URL for the API"
+      - name: api_key_header
+        label: "API Key Header"
+        type: text
+        placeholder: "e.g., Authorization, X-API-Key"
+        help: "HTTP header name for the API key"
+      - name: credential_key
+        label: "Credential Key"
+        type: text
+        placeholder: "e.g., OPENAI_API_KEY"
+        help: "Key name in the secrets store"
+      - name: verify_endpoint
+        label: "Verification Endpoint"
+        type: text
+        placeholder: "e.g., /user, /account, /verify"
+        help: "API endpoint to verify authentication"
+    optional_fields:
+      - name: api_key_prefix
+        label: "API Key Prefix"
+        type: text
+        placeholder: "e.g., Bearer , Token "
+        help: "Prefix to add before the API key (include space if needed)"
+      - name: response_field
+        label: "Response Field"
+        type: text
+        placeholder: "e.g., email, username, account_id"
+        help: "Field from response to log (optional)"
+    examples:
+      - name: "OpenAI API"
+        values:
+          api_endpoint: "https://api.openai.com/v1"
+          api_key_header: "Authorization"
+          credential_key: "OPENAI_API_KEY"
+          verify_endpoint: "/models"
+          api_key_prefix: "Bearer "
+      - name: "Stripe API"
+        values:
+          api_endpoint: "https://api.stripe.com/v1"
+          api_key_header: "Authorization"
+          credential_key: "STRIPE_SECRET_KEY"
+          verify_endpoint: "/charges?limit=1"
+          api_key_prefix: "Bearer "
+
+  config_file:
+    name: "Configuration File"
+    description: "For tools that read credentials from config files"
+    icon: "📁"
+    required_fields:
+      - name: config_path
+        label: "Config File Path"
+        type: text
+        placeholder: "e.g., .aws/credentials, .kube/config"
+        help: "Path to config file (relative to home directory)"
+      - name: credential_key
+        label: "Credential Key"
+        type: text
+        placeholder: "e.g., AWS_ACCESS_KEY"
+        help: "Key name in the secrets store"
+      - name: config_format
+        label: "Config Format"
+        type: select
+        options:
+          - json
+          - yaml
+          - ini
+          - custom
+        help: "Format of the configuration file"
+      - name: config_template
+        label: "Config Template"
+        type: json
+        placeholder: '{"token": "${TOKEN}"}'
+        help: "Template for the config file (use ${TOKEN} as placeholder)"
+    optional_fields:
+      - name: cli_command
+        label: "CLI Command (for verification)"
+        type: text
+        placeholder: "e.g., aws, kubectl"
+        help: "Optional CLI command to verify config"
+      - name: verify_cli_command
+        label: "Verification Command"
+        type: json
+        default: '["version"]'
+        help: "CLI arguments to verify configuration"
+      - name: additional_replacements
+        label: "Additional Replacements"
+        type: json
+        placeholder: '{"REGION": "AWS_REGION"}'
+        help: "Additional placeholders and their credential keys"
+    examples:
+      - name: "AWS CLI"
+        values:
+          config_path: ".aws/credentials"
+          credential_key: "AWS_ACCESS_KEY_ID"
+          config_format: "ini"
+          config_template:
+            default:
+              aws_access_key_id: "${TOKEN}"
+              aws_secret_access_key: "${SECRET}"
+          cli_command: "aws"
+          verify_cli_command: ["sts", "get-caller-identity"]
+          additional_replacements:
+            SECRET: "AWS_SECRET_ACCESS_KEY"

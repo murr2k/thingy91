@@ -1,28 +1,25 @@
 version: '3.8'
 
 services:
-  secrets-gui:
+  auth-gui:
     build: .
-    container_name: secrets-manager-gui
-    ports:
-      - "5000:5000"
+    container_name: auth-manager-gui
+    network_mode: host
     environment:
       - FLASK_ENV=production
       - FLASK_SECRET_KEY=${FLASK_SECRET_KEY:-change-me-in-production}
-      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-changeme}
     volumes:
-      # Mount encrypted secret files
-      - ../:/data:ro
-      - ~/.config/thingy91:/config
+      # Mount authctl for host system communication
+      - /usr/local/bin/authctl:/usr/local/bin/authctl:ro
+      # Mount auth manager module
+      - /home/murr2k/projects/thingy91/secrets_gui/auth_manager:/opt/auth_manager:ro
+      # Mount secrets data directory
+      - /home/murr2k/projects/thingy91/secrets_gui/data:/home/murr2k/projects/thingy91/secrets_gui/data:ro
+      # Mount host binaries to allow calling host commands
+      - /bin:/host/bin:ro
+      - /usr/bin:/host/usr/bin:ro
     restart: unless-stopped
-    networks:
-      - secrets-net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.secrets.rule=Host(`secrets.local`)"
-      - "traefik.http.services.secrets.loadbalancer.server.port=5000"
-
-networks:
-  secrets-net:
-    driver: bridge
+      - "traefik.http.routers.auth.rule=Host(`auth.local`)"
+      - "traefik.http.services.auth.loadbalancer.server.port=5000"

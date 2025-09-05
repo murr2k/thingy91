@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+"""
+{{ service_display_name }} authenticator for system-wide authentication.
+Auto-generated from config file template.
+"""
+
+import os
+import sys
+import json
+import yaml
+from pathlib import Path
+from typing import Optional, Dict, Any
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base_authenticator import BaseAuthenticator
+
+class {{ service_class_name }}Authenticator(BaseAuthenticator):
+    """{{ service_display_name }} authenticator using config file."""
+    
+    def __init__(self, credentials: dict):
+        super().__init__("{{ service_id }}", credentials)
+        self.config_path = Path.home() / "{{ config_path }}"
+        self.credential_key = "{{ credential_key }}"
+        self.required_keys = ["{{ credential_key }}"]
+        self.config_format = "{{ config_format }}"  # json, yaml, ini, or custom
+        {% if cli_command %}
+        self.cli_command = "{{ cli_command }}"
+        {% endif %}
+        
+    def authenticate(self) -> bool:
+        """Authenticate with {{ service_display_name }} by writing config file."""
+        token = self.credentials.get(self.credential_key)
+        
+        if not token:
+            self.logger.error("No {{ service_display_name }} credentials found")
+            self.update_status("no_credentials")
+            return False
+        
+        self.logger.info("Setting up {{ service_display_name }} configuration...")
+        
+        try:
+            # Create config directory if it doesn't exist
+            self.config_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Prepare configuration
+            config = self._build_config(token)
+            
+            # Write configuration file
+            if self.config_format == "json":
+                self.config_path.write_text(json.dumps(config, indent=2))
+            elif self.config_format == "yaml":
+                import yaml
+                self.config_path.write_text(yaml.dump(config, default_flow_style=False))
+            elif self.config_format == "ini":
+                self._write_ini_config(config)
+            else:
+                # Custom format - write as text
+                self.config_path.write_text(config)
+            
+            # Set appropriate permissions (readable by user only)
+            self.config_path.chmod(0o600)
+            
+            self.logger.info(f"Wrote configuration to {self.config_path}")
+            
+            {% if cli_command %}
+            # Verify configuration works
+            if self._verify_with_cli():
+                self.update_status("authenticated")
+                self.logger.info(f"✅ {{ service_display_name }} configured successfully")
+                return True
+            else:
+                self.logger.error("Configuration verification failed")
+                self.update_status("failed")
+                return False
+            {% else %}
+            self.update_status("authenticated")
+            self.logger.info(f"✅ {{ service_display_name }} configured successfully")
+            return True
+            {% endif %}
+            
+        except Exception as e:
+            self.logger.error(f"Failed to write configuration: {e}")
+            self.update_status("failed")
+            return False
+    
+    def verify_auth(self) -> bool:
+        """Verify {{ service_display_name }} configuration exists and is valid."""
+        if not self.config_path.exists():
+            self.update_status("not_authenticated")
+            return False
+        
+        try:
+            # Check if config file is readable and has content
+            content = self.config_path.read_text()
+            if not content.strip():
+                self.update_status("not_authenticated")
+                return False
+            
+            {% if cli_command %}
+            # Verify with CLI command
+            if self._verify_with_cli():
+                self.update_status("authenticated")
+                return True
+            else:
+                self.update_status("not_authenticated")
+                return False
+            {% else %}
+            # Config file exists and has content
+            self.update_status("authenticated")
+            return True
+            {% endif %}
+            
+        except Exception as e:
+            self.logger.error(f"Error reading config: {e}")
+            self.update_status("not_authenticated")
+            return False
+    
+    def logout(self) -> bool:
+        """Logout from {{ service_display_name }} by removing config file."""
+        try:
+            if self.config_path.exists():
+                # Backup before removing (optional)
+                backup_path = self.config_path.with_suffix('.backup')
+                self.config_path.rename(backup_path)
+                self.logger.info(f"Backed up config to {backup_path}")
+            
+            self.update_status("logged_out")
+            self.logger.info("Removed {{ service_display_name }} configuration")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error removing config: {e}")
+            return False
+    
+    def _build_config(self, token: str) -> Any:
+        """Build configuration structure."""
+        # Template will be customized based on service requirements
+        config = {{ config_template | tojson }}
+        
+        # Replace token placeholder
+        config_str = json.dumps(config)
+        config_str = config_str.replace("${TOKEN}", token)
+        {% if additional_replacements %}
+        # Additional replacements
+        {% for key, value in additional_replacements.items() %}
+        config_str = config_str.replace("${{"{{ key }}"}}", self.credentials.get("{{ value }}", ""))
+        {% endfor %}
+        {% endif %}
+        
+        return json.loads(config_str)
+    
+    {% if config_format == "ini" %}
+    def _write_ini_config(self, config: dict):
+        """Write INI format configuration."""
+        import configparser
+        parser = configparser.ConfigParser()
+        
+        for section, values in config.items():
+            parser[section] = values
+        
+        with open(self.config_path, 'w') as f:
+            parser.write(f)
+    {% endif %}
+    
+    {% if cli_command %}
+    def _verify_with_cli(self) -> bool:
+        """Verify configuration using CLI command."""
+        success, stdout, stderr = self.run_command(
+            {{ verify_cli_command | tojson }},
+            timeout=10
+        )
+        return success
+    {% endif %}

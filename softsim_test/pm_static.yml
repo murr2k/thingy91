@@ -1,0 +1,59 @@
+# Static partition map for Thingy91 with SoftSIM support
+# Based on thingy91_pm_static.yml with enlarged TF-M partition (0x18000 = 96KB)
+
+app:
+  address: 0x30000
+  size: 0x43000  # Reduced to make room for larger TF-M
+
+mcuboot:
+  address: 0x0
+  size: 0xc000
+
+mcuboot_pad:
+  address: 0xc000
+  size: 0x200
+  
+mcuboot_primary:
+  address: 0xc000
+  size: 0x67000  # Same total size
+  span: [tfm, mcuboot_pad, app]
+
+mcuboot_primary_app:
+  address: 0xc200
+  size: 0x66e00  # Adjusted for new layout
+  span: [app, tfm]
+
+mcuboot_scratch:
+  address: 0xde000
+  size: 0x1e000
+
+mcuboot_secondary:
+  address: 0x73000
+  size: 0x67000  # Same as primary
+
+EMPTY_0:
+  address: 0xfc000
+  size: 0x2000
+
+settings_storage:
+  address: 0xfe000
+  size: 0x2000
+
+nonsecure_storage:
+  address: 0xfe000
+  size: 0x2000
+  span: [settings_storage]
+
+tfm_secure:
+  address: 0xc000
+  size: 0x18000  # 96KB for SoftSIM
+  span: [mcuboot_pad, tfm]
+
+tfm_nonsecure:
+  address: 0x30000
+  size: 0x43000  # Matches app size
+  span: [app]
+
+tfm:
+  address: 0xc200
+  size: 0x17e00  # 96KB - 0x200 padding

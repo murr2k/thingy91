@@ -190,6 +190,10 @@
             background: #e2e8f0;
         }
         
+        .status-info {
+            background: #bee3f8;
+        }
+        
         @keyframes pulse {
             0% {
                 opacity: 0.6;
@@ -250,6 +254,35 @@
             background: #fff5f5;
             border-color: #feb2b2;
             color: #742a2a;
+        }
+        
+        .auth-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .auth-btn:hover {
+            background: #3182ce;
+            transform: translateY(-1px);
+        }
+        
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+        
+        .auth-btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
         }
         
         .service-actions {
@@ -422,6 +455,7 @@
                 🔐 Secrets Manager
             </h1>
             <div class="actions">
+                <button class="btn btn-primary" onclick="window.location.href='/create-service'">➕ New Service</button>
                 <button class="btn btn-secondary" onclick="refreshAll()">↻ Refresh</button>
                 <button class="btn btn-secondary" onclick="window.location.href='/logout'">Logout</button>
             </div>
@@ -446,12 +480,22 @@
                     </div>
                     <div class="service-message" id="message-{{ service_id }}"></div>
                     <div class="service-keys">
-                        {% for key in service.keys %}
-                        <span class="key-badge {% if key in service.required %}required{% endif %}">
+                        {% for key in service['keys'] %}
+                        <span class="key-badge {% if key in service['required'] %}required{% endif %}">
                             {{ key.split('_')[-1] }}
                         </span>
                         {% endfor %}
                     </div>
+                    
+                    <!-- CLI Authentication Button for supported services -->
+                    {% if service_id in ['github', 'flyio', 'npm', 'docker', 'terraform', 'cloudflare'] %}
+                    <div class="cli-actions" style="margin-top: 10px;">
+                        <button class="auth-btn" onclick="authenticateService('{{ service_id }}'); event.stopPropagation();" 
+                                id="auth-btn-{{ service_id }}">
+                            🔐 Authenticate CLI
+                        </button>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
@@ -505,6 +549,24 @@
             }
         });
         
+        socket.on('service_added', function(data) {
+            // Reload page to show new service
+            window.location.reload();
+        });
+        
+        socket.on('service_deleted', function(data) {
+            // Remove service card from UI
+            const card = document.querySelector(`[data-service="${data.service_id}"]`);
+            if (card) {
+                card.remove();
+            }
+        });
+        
+        socket.on('service_updated', function(data) {
+            // Reload page to show updated service
+            window.location.reload();
+        });
+        
         function updateServiceStatus(serviceId, status) {
             const indicator = document.getElementById(`status-${serviceId}`);
             const statusText = document.getElementById(`status-text-${serviceId}`);
@@ -534,6 +596,63 @@
         function refreshAll() {
             socket.emit('refresh_status');
             showToast('Refreshing all services...', 'success');
+        }
+        
+        function authenticateService(serviceId) {
+            const button = document.getElementById(`auth-btn-${serviceId}`);
+            const originalText = button.innerHTML;
+            
+            // Disable button and show loading
+            button.disabled = true;
+            button.innerHTML = '🔄 Authenticating...';
+            
+            fetch(`/api/service/${serviceId}/authenticate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.innerHTML = '✅ Authenticated';
+                    button.style.background = '#48bb78';
+                    
+                    // Update service status immediately
+                    if (data.status) {
+                        updateServiceStatus(serviceId, data.status);
+                    }
+                    
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '#4299e1';
+                        button.disabled = false;
+                    }, 3000);
+                } else {
+                    button.innerHTML = '❌ Failed';
+                    button.style.background = '#f56565';
+                    
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '#4299e1';
+                        button.disabled = false;
+                    }, 3000);
+                }
+            })
+            .catch(error => {
+                console.error('Authentication error:', error);
+                button.innerHTML = '❌ Error';
+                button.style.background = '#f56565';
+                
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '#4299e1';
+                    button.disabled = false;
+                }, 3000);
+            });
         }
         
         function openServiceModal(serviceId) {

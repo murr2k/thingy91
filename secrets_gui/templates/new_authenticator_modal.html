@@ -1,0 +1,758 @@
+<!-- New Authenticator Modal -->
+<div id="newAuthModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add New Service</h2>
+            <span class="close" onclick="closeNewAuthModal()">&times;</span>
+        </div>
+        
+        <div class="modal-body">
+            <!-- Step indicators -->
+            <div class="steps">
+                <div class="step-indicator active" id="step1-indicator">1. Service Info</div>
+                <div class="step-indicator" id="step2-indicator">2. Template</div>
+                <div class="step-indicator" id="step3-indicator">3. Configuration</div>
+                <div class="step-indicator" id="step4-indicator">4. Review</div>
+            </div>
+            
+            <!-- Step 1: Basic Info -->
+            <div class="step-content active" id="step1">
+                <h3>Service Information</h3>
+                <div class="form-group">
+                    <label for="serviceName">Service Name</label>
+                    <input type="text" id="serviceName" placeholder="e.g., Vercel, Stripe, AWS" class="form-control">
+                    <small>The display name for this service</small>
+                </div>
+                <div class="form-group">
+                    <label for="serviceDescription">Description (Optional)</label>
+                    <input type="text" id="serviceDescription" placeholder="Brief description of the service" class="form-control">
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="nextStep()">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Template Selection -->
+            <div class="step-content" id="step2">
+                <h3>Select Authentication Type</h3>
+                <div class="template-cards" id="templateCards">
+                    <!-- Templates will be loaded dynamically -->
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()" disabled id="step2NextBtn">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Configuration -->
+            <div class="step-content" id="step3">
+                <h3>Configuration</h3>
+                <div id="dynamicFields">
+                    <!-- Dynamic fields will be loaded based on template -->
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Review</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Review -->
+            <div class="step-content" id="step4">
+                <h3>Review Configuration</h3>
+                <div id="reviewContent">
+                    <!-- Review content will be generated -->
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                    <button class="btn btn-success" onclick="createAuthenticator()">
+                        <span id="createBtnText">Create Authenticator</span>
+                        <span id="createSpinner" style="display: none;">Creating...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #1e1e1e;
+    margin: 5% auto;
+    padding: 0;
+    border: 1px solid #444;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: #f0f0f0;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+.step-indicator {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    background: #2a2a2a;
+    color: #888;
+    border-radius: 4px;
+    margin: 0 5px;
+    transition: all 0.3s;
+}
+
+.step-indicator.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.step-indicator.completed {
+    background: #28a745;
+    color: white;
+}
+
+.step-content {
+    display: none;
+    min-height: 300px;
+}
+
+.step-content.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #e0e0e0;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.form-control small {
+    display: block;
+    margin-top: 5px;
+    color: #888;
+    font-size: 12px;
+}
+
+.template-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.template-card {
+    padding: 20px;
+    background: #2a2a2a;
+    border: 2px solid #444;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.template-card:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.template-card.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+.template-card .template-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.template-card .template-name {
+    font-weight: bold;
+    color: #e0e0e0;
+    margin-bottom: 5px;
+}
+
+.template-card .template-desc {
+    font-size: 12px;
+    color: #888;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #444;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary {
+    background: #444;
+    color: #e0e0e0;
+}
+
+.btn-secondary:hover {
+    background: #555;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.dynamic-field {
+    margin-bottom: 15px;
+}
+
+.field-required {
+    color: #ff6b6b;
+}
+
+.review-item {
+    padding: 10px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.review-label {
+    color: #888;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.review-value {
+    color: #e0e0e0;
+    font-family: 'Courier New', monospace;
+}
+
+.success-message {
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.2) 0%, rgba(32, 201, 151, 0.2) 100%);
+    border: 1px solid #28a745;
+    border-radius: 4px;
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    padding: 15px;
+    background: rgba(220, 53, 69, 0.2);
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+    color: #dc3545;
+    margin-bottom: 20px;
+}
+</style>
+
+<script>
+let currentStep = 1;
+let selectedTemplate = null;
+let templateFields = {};
+let formData = {};
+
+function openNewAuthModal() {
+    document.getElementById('newAuthModal').style.display = 'block';
+    loadTemplates();
+}
+
+function closeNewAuthModal() {
+    document.getElementById('newAuthModal').style.display = 'none';
+    resetForm();
+}
+
+function resetForm() {
+    currentStep = 1;
+    selectedTemplate = null;
+    templateFields = {};
+    formData = {};
+    showStep(1);
+}
+
+function showStep(step) {
+    // Hide all steps
+    document.querySelectorAll('.step-content').forEach(el => {
+        el.classList.remove('active');
+    });
+    document.querySelectorAll('.step-indicator').forEach(el => {
+        el.classList.remove('active');
+    });
+    
+    // Show current step
+    document.getElementById(`step${step}`).classList.add('active');
+    document.getElementById(`step${step}-indicator`).classList.add('active');
+    
+    // Mark completed steps
+    for (let i = 1; i < step; i++) {
+        document.getElementById(`step${i}-indicator`).classList.add('completed');
+    }
+    
+    currentStep = step;
+}
+
+function nextStep() {
+    if (validateCurrentStep()) {
+        saveCurrentStepData();
+        
+        if (currentStep === 2) {
+            loadTemplateFields();
+        } else if (currentStep === 3) {
+            generateReview();
+        }
+        
+        showStep(currentStep + 1);
+    }
+}
+
+function previousStep() {
+    showStep(currentStep - 1);
+}
+
+function validateCurrentStep() {
+    if (currentStep === 1) {
+        const serviceName = document.getElementById('serviceName').value.trim();
+        if (!serviceName) {
+            alert('Please enter a service name');
+            return false;
+        }
+    } else if (currentStep === 2) {
+        if (!selectedTemplate) {
+            alert('Please select a template');
+            return false;
+        }
+    } else if (currentStep === 3) {
+        // Validate required fields
+        const missingFields = [];
+        for (const field of templateFields.required || []) {
+            const value = document.getElementById(`field_${field.name}`).value.trim();
+            if (!value) {
+                missingFields.push(field.label || field.name);
+            }
+        }
+        if (missingFields.length > 0) {
+            alert(`Please fill in required fields: ${missingFields.join(', ')}`);
+            return false;
+        }
+    }
+    return true;
+}
+
+function saveCurrentStepData() {
+    if (currentStep === 1) {
+        formData.serviceName = document.getElementById('serviceName').value.trim();
+        formData.serviceDescription = document.getElementById('serviceDescription').value.trim();
+    } else if (currentStep === 3) {
+        formData.parameters = {};
+        
+        // Save required fields
+        for (const field of templateFields.required || []) {
+            const value = document.getElementById(`field_${field.name}`).value.trim();
+            if (field.type === 'json') {
+                try {
+                    formData.parameters[field.name] = JSON.parse(value);
+                } catch (e) {
+                    formData.parameters[field.name] = value;
+                }
+            } else if (field.type === 'boolean') {
+                formData.parameters[field.name] = document.getElementById(`field_${field.name}`).checked;
+            } else {
+                formData.parameters[field.name] = value;
+            }
+        }
+        
+        // Save optional fields
+        for (const field of templateFields.optional || []) {
+            const element = document.getElementById(`field_${field.name}`);
+            if (element) {
+                const value = element.type === 'checkbox' ? element.checked : element.value.trim();
+                if (value) {
+                    if (field.type === 'json') {
+                        try {
+                            formData.parameters[field.name] = JSON.parse(value);
+                        } catch (e) {
+                            formData.parameters[field.name] = value;
+                        }
+                    } else {
+                        formData.parameters[field.name] = value;
+                    }
+                }
+            }
+        }
+    }
+}
+
+async function loadTemplates() {
+    try {
+        const response = await sendWebSocketRequest({
+            action: 'list_templates'
+        });
+        
+        const templates = response.templates || [];
+        const container = document.getElementById('templateCards');
+        container.innerHTML = '';
+        
+        templates.forEach(template => {
+            const card = document.createElement('div');
+            card.className = 'template-card';
+            card.onclick = () => selectTemplate(template);
+            card.innerHTML = `
+                <div class="template-icon">${template.icon || '📄'}</div>
+                <div class="template-name">${template.name}</div>
+                <div class="template-desc">${template.description}</div>
+            `;
+            container.appendChild(card);
+        });
+        
+        // Add Claude option
+        const claudeCard = document.createElement('div');
+        claudeCard.className = 'template-card';
+        claudeCard.onclick = () => selectTemplate({id: 'custom', name: 'Custom (Claude)', icon: '🤖'});
+        claudeCard.innerHTML = `
+            <div class="template-icon">🤖</div>
+            <div class="template-name">Custom (Claude)</div>
+            <div class="template-desc">Let AI generate a custom authenticator</div>
+        `;
+        container.appendChild(claudeCard);
+        
+    } catch (error) {
+        console.error('Failed to load templates:', error);
+    }
+}
+
+function selectTemplate(template) {
+    selectedTemplate = template;
+    formData.templateType = template.id;
+    
+    // Update UI
+    document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    event.currentTarget.classList.add('selected');
+    
+    document.getElementById('step2NextBtn').disabled = false;
+}
+
+async function loadTemplateFields() {
+    if (selectedTemplate.id === 'custom') {
+        // Show Claude input
+        document.getElementById('dynamicFields').innerHTML = `
+            <div class="form-group">
+                <label for="authDescription">Describe Authentication Process</label>
+                <textarea id="authDescription" class="form-control" rows="10" placeholder="Describe how authentication works for this service:
+- What CLI commands or API endpoints are used?
+- Where are credentials stored?
+- How to verify authentication?
+- Include links to documentation if available"></textarea>
+            </div>
+        `;
+    } else {
+        try {
+            const response = await sendWebSocketRequest({
+                action: 'get_template_fields',
+                template_id: selectedTemplate.id
+            });
+            
+            templateFields = response;
+            renderTemplateFields();
+            
+        } catch (error) {
+            console.error('Failed to load template fields:', error);
+        }
+    }
+}
+
+function renderTemplateFields() {
+    let html = '';
+    
+    // Required fields
+    if (templateFields.required && templateFields.required.length > 0) {
+        html += '<h4>Required Fields</h4>';
+        templateFields.required.forEach(field => {
+            html += renderField(field, true);
+        });
+    }
+    
+    // Optional fields
+    if (templateFields.optional && templateFields.optional.length > 0) {
+        html += '<h4>Optional Fields</h4>';
+        templateFields.optional.forEach(field => {
+            html += renderField(field, false);
+        });
+    }
+    
+    // Examples
+    if (templateFields.examples && templateFields.examples.length > 0) {
+        html += '<h4>Examples</h4>';
+        html += '<select class="form-control" onchange="loadExample(this.value)">';
+        html += '<option value="">-- Select an example --</option>';
+        templateFields.examples.forEach((example, index) => {
+            html += `<option value="${index}">${example.name}</option>`;
+        });
+        html += '</select>';
+    }
+    
+    document.getElementById('dynamicFields').innerHTML = html;
+}
+
+function renderField(field, required) {
+    let html = `<div class="dynamic-field">`;
+    html += `<label for="field_${field.name}">`;
+    html += field.label || field.name;
+    if (required) html += ' <span class="field-required">*</span>';
+    html += '</label>';
+    
+    if (field.type === 'select') {
+        html += `<select id="field_${field.name}" class="form-control">`;
+        field.options.forEach(option => {
+            html += `<option value="${option}">${option}</option>`;
+        });
+        html += '</select>';
+    } else if (field.type === 'boolean') {
+        html += `<input type="checkbox" id="field_${field.name}" ${field.default ? 'checked' : ''}>`;
+    } else if (field.type === 'json') {
+        html += `<textarea id="field_${field.name}" class="form-control" rows="3" placeholder='${field.placeholder || field.default || ""}'>${field.default || ""}</textarea>`;
+    } else {
+        html += `<input type="${field.type === 'url' ? 'url' : 'text'}" id="field_${field.name}" class="form-control" placeholder="${field.placeholder || ''}" value="${field.default || ''}">`;
+    }
+    
+    if (field.help) {
+        html += `<small>${field.help}</small>`;
+    }
+    
+    html += '</div>';
+    return html;
+}
+
+function loadExample(index) {
+    if (!index) return;
+    
+    const example = templateFields.examples[index];
+    if (example && example.values) {
+        Object.entries(example.values).forEach(([key, value]) => {
+            const field = document.getElementById(`field_${key}`);
+            if (field) {
+                if (typeof value === 'object') {
+                    field.value = JSON.stringify(value, null, 2);
+                } else {
+                    field.value = value;
+                }
+            }
+        });
+    }
+}
+
+function generateReview() {
+    let html = '<div class="review-content">';
+    
+    html += '<div class="review-item">';
+    html += '<div class="review-label">Service Name</div>';
+    html += `<div class="review-value">${formData.serviceName}</div>`;
+    html += '</div>';
+    
+    html += '<div class="review-item">';
+    html += '<div class="review-label">Template</div>';
+    html += `<div class="review-value">${selectedTemplate.name}</div>`;
+    html += '</div>';
+    
+    if (formData.parameters) {
+        html += '<div class="review-item">';
+        html += '<div class="review-label">Configuration</div>';
+        html += '<div class="review-value">';
+        html += '<pre>' + JSON.stringify(formData.parameters, null, 2) + '</pre>';
+        html += '</div>';
+        html += '</div>';
+    }
+    
+    html += '</div>';
+    
+    document.getElementById('reviewContent').innerHTML = html;
+}
+
+async function createAuthenticator() {
+    const createBtn = document.getElementById('createBtnText');
+    const spinner = document.getElementById('createSpinner');
+    
+    createBtn.style.display = 'none';
+    spinner.style.display = 'inline';
+    
+    try {
+        const response = await sendWebSocketRequest({
+            action: 'create_authenticator',
+            service_name: formData.serviceName,
+            template_type: formData.templateType,
+            parameters: formData.parameters,
+            use_claude: formData.templateType === 'custom'
+        });
+        
+        if (response.success) {
+            document.getElementById('reviewContent').innerHTML = `
+                <div class="success-message">
+                    <h4>✅ Authenticator Created Successfully!</h4>
+                    <p>${response.message}</p>
+                    <p>File: ${response.file_path}</p>
+                    ${response.requires_restart ? '<p><strong>Note:</strong> The auth server needs to be restarted to load the new authenticator.</p>' : ''}
+                </div>
+            `;
+            
+            // Close modal after 3 seconds
+            setTimeout(() => {
+                closeNewAuthModal();
+                location.reload(); // Reload to show new service
+            }, 3000);
+            
+        } else {
+            document.getElementById('reviewContent').innerHTML = `
+                <div class="error-message">
+                    <h4>❌ Creation Failed</h4>
+                    <p>${response.message || response.error}</p>
+                    ${response.missing_fields ? `<p>Missing fields: ${response.missing_fields.join(', ')}</p>` : ''}
+                </div>
+            `;
+        }
+        
+    } catch (error) {
+        document.getElementById('reviewContent').innerHTML = `
+            <div class="error-message">
+                <h4>❌ Error</h4>
+                <p>${error.message || 'Failed to create authenticator'}</p>
+            </div>
+        `;
+    } finally {
+        createBtn.style.display = 'inline';
+        spinner.style.display = 'none';
+    }
+}
+
+// WebSocket helper (to be integrated with main app)
+async function sendWebSocketRequest(request) {
+    // This will be integrated with the main app's WebSocket client
+    const ws = new WebSocket('ws://localhost:8766');
+    
+    return new Promise((resolve, reject) => {
+        ws.onopen = () => {
+            request.id = Date.now().toString();
+            ws.send(JSON.stringify(request));
+        };
+        
+        ws.onmessage = (event) => {
+            const response = JSON.parse(event.data);
+            if (response.id === request.id) {
+                resolve(response.data || {});
+                ws.close();
+            }
+        };
+        
+        ws.onerror = (error) => {
+            reject(error);
+            ws.close();
+        };
+        
+        setTimeout(() => {
+            reject(new Error('WebSocket timeout'));
+            ws.close();
+        }, 10000);
+    });
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('newAuthModal');
+    if (event.target === modal) {
+        closeNewAuthModal();
+    }
+}
+</script>

@@ -1,0 +1,224 @@
+#!/usr/bin/env python3
+"""
+authctl - Command-line interface for the Authentication Manager
+Provides system-wide authentication management for development tools.
+"""
+
+import argparse
+import sys
+import json
+from pathlib import Path
+from tabulate import tabulate
+
+# Add auth_manager to path
+sys.path.append(str(Path(__file__).parent))
+from auth_manager import AuthManager
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='System-wide authentication manager for development tools',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  authctl login               # Authenticate all services
+  authctl login github        # Authenticate only GitHub
+  authctl status              # Show authentication status
+  authctl verify              # Verify all authentications
+  authctl refresh             # Refresh expiring tokens
+  authctl logout              # Logout from all services
+  authctl monitor             # Start background monitoring
+  authctl stop                # Stop background monitoring
+        """
+    )
+    
+    subparsers = parser.add_subparsers(dest='command', help='Commands')
+    
+    # Login command
+    login_parser = subparsers.add_parser('login', help='Authenticate with services')
+    login_parser.add_argument('service', nargs='?', help='Specific service to authenticate')
+    
+    # Logout command
+    logout_parser = subparsers.add_parser('logout', help='Logout from services')
+    logout_parser.add_argument('service', nargs='?', help='Specific service to logout from')
+    
+    # Status command
+    status_parser = subparsers.add_parser('status', help='Show authentication status')
+    status_parser.add_argument('-j', '--json', action='store_true', help='Output as JSON')
+    
+    # Verify command
+    verify_parser = subparsers.add_parser('verify', help='Verify authentication status')
+    
+    # Refresh command
+    refresh_parser = subparsers.add_parser('refresh', help='Refresh expiring tokens')
+    
+    # Monitor command
+    monitor_parser = subparsers.add_parser('monitor', help='Start background monitoring')
+    monitor_parser.add_argument('-d', '--daemon', action='store_true', 
+                                help='Run as daemon process')
+    
+    # Stop command
+    stop_parser = subparsers.add_parser('stop', help='Stop background monitoring')
+    
+    # List command
+    list_parser = subparsers.add_parser('list', help='List available services')
+    
+    args = parser.parse_args()
+    
+    if not args.command:
+        parser.print_help()
+        return 1
+    
+    # Initialize auth manager
+    manager = AuthManager()
+    
+    # Execute command
+    if args.command == 'login':
+        if args.service:
+            # Login specific service
+            if args.service in manager.authenticators:
+                print(f"Authenticating {args.service}...")
+                success = manager.authenticators[args.service].authenticate()
+                if success:
+                    print(f"✅ {args.service} authenticated successfully")
+                    return 0
+                else:
+                    print(f"❌ {args.service} authentication failed")
+                    return 1
+            else:
+                print(f"Error: Unknown service '{args.service}'")
+                print(f"Available services: {', '.join(manager.authenticators.keys())}")
+                return 1
+        else:
+            # Login all services
+            results = manager.authenticate_all()
+            failed = [s for s, success in results.items() if not success]
+            if failed:
+                print(f"\n⚠️  Some services failed: {', '.join(failed)}")
+                return 1
+            else:
+                print("\n✅ All services authenticated successfully")
+                return 0
+    
+    elif args.command == 'logout':
+        if args.service:
+            # Logout specific service
+            if args.service in manager.authenticators:
+                print(f"Logging out from {args.service}...")
+                success = manager.authenticators[args.service].logout()
+                if success:
+                    print(f"✅ Logged out from {args.service}")
+                    return 0
+                else:
+                    print(f"❌ Failed to logout from {args.service}")
+                    return 1
+            else:
+                print(f"Error: Unknown service '{args.service}'")
+                return 1
+        else:
+            # Logout all services
+            manager.logout_all()
+            print("✅ Logged out from all services")
+            return 0
+    
+    elif args.command == 'status':
+        # First verify to populate status
+        manager.verify_all()
+        status = manager.get_status()
+        
+        if args.json:
+            print(json.dumps(status, indent=2, default=str))
+        else:
+            # Format as table
+            print("\n" + "="*60)
+            print("Authentication Status")
+            print("="*60)
+            
+            # Service status table
+            table_data = []
+            for service, info in status['services'].items():
+                auth_status = "✅ Authenticated" if info['authenticated'] else "❌ Not authenticated"
+                table_data.append([service.capitalize(), auth_status])
+            
+            if table_data:
+                print(tabulate(table_data, headers=['Service', 'Status'], 
+                              tablefmt='simple'))
+            
+            # Summary
+            summary = status['summary']
+            print(f"\nSummary: {summary['authenticated']}/{summary['total']} authenticated")
+            print(f"Last check: {status['last_check']}")
+            print("="*60)
+        
+        return 0
+    
+    elif args.command == 'verify':
+        print("Verifying authentication status...")
+        results = manager.verify_all()
+        
+        # Display results
+        for service, authenticated in results.items():
+            status = "✅" if authenticated else "❌"
+            print(f"  {status} {service}")
+        
+        # Summary
+        authenticated_count = sum(1 for auth in results.values() if auth)
+        print(f"\n{authenticated_count}/{len(results)} services authenticated")
+        
+        return 0 if all(results.values()) else 1
+    
+    elif args.command == 'refresh':
+        print("Refreshing expiring tokens...")
+        refreshed = manager.refresh_if_needed()
+        
+        if refreshed:
+            print(f"✅ Refreshed: {', '.join(refreshed)}")
+        else:
+            print("No tokens needed refresh")
+        
+        return 0
+    
+    elif args.command == 'monitor':
+        if args.daemon:
+            # Run as daemon
+            import daemon
+            print("Starting authentication monitor daemon...")
+            with daemon.DaemonContext():
+                manager.start_monitoring()
+                # Keep daemon running
+                import time
+                while True:
+                    time.sleep(60)
+        else:
+            print("Starting authentication monitor...")
+            print("Press Ctrl+C to stop")
+            manager.start_monitoring()
+            
+            # Keep running until interrupted
+            try:
+                import time
+                while True:
+                    time.sleep(1)
+            except KeyboardInterrupt:
+                print("\nStopping monitor...")
+                manager.stop_monitoring()
+        
+        return 0
+    
+    elif args.command == 'stop':
+        print("Stopping authentication monitor...")
+        manager.stop_monitoring()
+        return 0
+    
+    elif args.command == 'list':
+        print("\nAvailable services:")
+        for service in sorted(manager.authenticators.keys()):
+            print(f"  • {service}")
+        print(f"\nTotal: {len(manager.authenticators)} services")
+        return 0
+    
+    else:
+        parser.print_help()
+        return 1
+
+if __name__ == "__main__":
+    sys.exit(main())

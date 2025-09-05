@@ -10,26 +10,32 @@ manifest:
   remotes:
     - name: ncs
       url-base: https://github.com/nrfconnect
+    - name: onomondo
+      url-base: https://github.com/onomondo
 
   projects:
-    - name: nrf
-      revision: v2.4.0
+    - name: sdk-nrf
+      revision: v3.1.0
       path: nrf
-    - name: zephyr
-      revision: v3.3.99-ncs1
+    - name: sdk-zephyr
+      revision: v4.0.99-ncs1-2
       path: zephyr
-    - name: mcuboot
-      revision: v1.10.0-ncs1
+    - name: sdk-mcuboot
+      revision: v2.1.0-ncs5-2
       path: bootloader/mcuboot
-    - name: mbedtls
-      revision: v3.4.0-ncs1
+    - name: sdk-mbedtls
+      revision: v3.6.3-ncs1-2
       path: modules/crypto/mbedtls
-    - name: nrfxlib
-      revision: v2.4.0
+    - name: sdk-nrfxlib
+      revision: v3.0.2
       path: nrfxlib
-    - name: trusted-firmware-m
-      revision: v1.7.0-ncs1
+    - name: sdk-trusted-firmware-m
+      revision: v2.1.1-ncs4-2
       path: modules/tee/tf-m/trusted-firmware-m
+    - name: onomondo-softsim
+      remote: onomondo
+      revision: main
+      path: modules/lib/onomondo-softsim
 
   self:
     path: thingy91-demo

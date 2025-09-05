@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Service - Secrets Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .wizard-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .wizard-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .wizard-step::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+        
+        .wizard-step:last-child::after {
+            display: none;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #718096;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 5px;
+        }
+        
+        .wizard-step.active .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .wizard-step.completed .step-number {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .step-title {
+            font-size: 12px;
+            color: #718096;
+        }
+        
+        .wizard-step.active .step-title {
+            color: #2d3748;
+            font-weight: 600;
+        }
+        
+        .wizard-content {
+            min-height: 400px;
+        }
+        
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .template-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .template-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        
+        .template-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        }
+        
+        .template-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .template-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .template-desc {
+            font-size: 12px;
+            color: #718096;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+        }
+        
+        .form-section h3 {
+            font-size: 16px;
+            color: #2d3748;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+        
+        .form-label .required {
+            color: #e53e3e;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .icon-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .icon-option {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .icon-option:hover {
+            border-color: #667eea;
+        }
+        
+        .icon-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .color-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .field-builder {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        
+        .field-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .field-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .field-action-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: #f7fafc;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .field-action-btn:hover {
+            background: #e2e8f0;
+        }
+        
+        .add-field-btn {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 6px;
+            background: transparent;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .add-field-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .validation-error {
+            color: #e53e3e;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .preview-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .preview-icon {
+            font-size: 36px;
+        }
+        
+        .preview-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .preview-fields {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .preview-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f7fafc;
+        }
+        
+        .preview-field-key {
+            font-weight: 500;
+            color: #4a5568;
+        }
+        
+        .preview-field-type {
+            font-size: 12px;
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span>🔧</span>
+                Create New Service
+                <a href="/" style="margin-left: auto; text-decoration: none; font-size: 14px; color: #667eea;">
+                    ← Back to Dashboard
+                </a>
+            </h1>
+        </div>
+        
+        <div class="wizard-container">
+            <div class="wizard-steps">
+                <div class="wizard-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Template</div>
+                </div>
+                <div class="wizard-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Configure</div>
+                </div>
+                <div class="wizard-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Health Check</div>
+                </div>
+                <div class="wizard-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Review</div>
+                </div>
+            </div>
+            
+            <div class="wizard-content">
+                <!-- Step 1: Template Selection -->
+                <div class="wizard-panel" id="step1" style="display: block;">
+                    <h2>Choose a Template</h2>
+                    <p style="color: #718096; margin-top: 5px;">Select a template to get started quickly</p>
+                    
+                    <div class="template-grid" id="templateGrid">
+                        <!-- Templates will be loaded dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Step 2: Configuration -->
+                <div class="wizard-panel" id="step2" style="display: none;">
+                    <h2>Configure Service</h2>
+                    
+                    <div class="form-section">
+                        <h3>Basic Information</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Service ID <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" id="serviceId" 
+                                   placeholder="e.g., my_api_service" 
+                                   pattern="[a-z0-9_]+"
+                                   title="Lowercase letters, numbers, and underscores only">
+                            <div class="validation-error" id="serviceIdError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Display Name <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" id="serviceName" 
+                                   placeholder="e.g., My API Service">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Icon</label>
+                            <div class="icon-selector" id="iconSelector">
+                                <!-- Icons will be populated based on template -->
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Color</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="form-input" id="serviceColor" 
+                                       value="#667eea" style="width: 100px;">
+                                <div class="color-preview" id="colorPreview"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Credential Fields</h3>
+                        <div class="field-builder" id="fieldBuilder">
+                            <!-- Fields will be populated based on template -->
+                        </div>
+                        <button class="add-field-btn" id="addFieldBtn">
+                            + Add Custom Field
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Health Check -->
+                <div class="wizard-panel" id="step3" style="display: none;">
+                    <h2>Health Check Configuration</h2>
+                    <p style="color: #718096; margin-top: 5px;">Configure how to verify service connectivity</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Health Check Type</label>
+                        <select class="form-select" id="healthCheckType">
+                            <option value="none">No Health Check</option>
+                            <option value="https">HTTPS Endpoint</option>
+                            <option value="tcp">TCP Port Check</option>
+                            <option value="command">Command Execution</option>
+                            <option value="database">Database Connection</option>
+                            <option value="oauth_token">OAuth Token Test</option>
+                        </select>
+                    </div>
+                    
+                    <div id="healthCheckFields">
+                        <!-- Dynamic fields based on health check type -->
+                    </div>
+                </div>
+                
+                <!-- Step 4: Review -->
+                <div class="wizard-panel" id="step4" style="display: none;">
+                    <h2>Review Configuration</h2>
+                    <p style="color: #718096; margin-top: 5px;">Review your service configuration before creating</p>
+                    
+                    <div class="preview-card" id="servicePreview">
+                        <!-- Preview will be generated dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wizard-actions">
+                <button class="btn btn-secondary" id="prevBtn" style="display: none;">
+                    Previous
+                </button>
+                <button class="btn btn-primary" id="nextBtn">
+                    Next
+                </button>
+                <button class="btn btn-success" id="createBtn" style="display: none;">
+                    Create Service
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        let selectedTemplate = null;
+        let serviceConfig = {
+            id: '',
+            name: '',
+            icon: '🔧',
+            color: '#667eea',
+            keys: [],
+            required: [],
+            health_check: { type: 'none' }
+        };
+        
+        // Load templates on page load
+        async function loadTemplates() {
+            try {
+                const response = await fetch('/api/templates');
+                const templates = await response.json();
+                
+                const grid = document.getElementById('templateGrid');
+                grid.innerHTML = '';
+                
+                for (const [key, template] of Object.entries(templates)) {
+                    const card = document.createElement('div');
+                    card.className = 'template-card';
+                    card.dataset.templateKey = key;
+                    
+                    const icon = template.icon_options ? template.icon_options[0] : '🔧';
+                    
+                    card.innerHTML = `
+                        <div class="template-icon">${icon}</div>
+                        <div class="template-name">${template.name}</div>
+                        <div class="template-desc">${template.description || ''}</div>
+                    `;
+                    
+                    card.addEventListener('click', () => selectTemplate(key, template));
+                    grid.appendChild(card);
+                }
+            } catch (error) {
+                console.error('Failed to load templates:', error);
+            }
+        }
+        
+        function selectTemplate(key, template) {
+            selectedTemplate = { key, ...template };
+            
+            // Update UI
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.classList.toggle('selected', card.dataset.templateKey === key);
+            });
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+        
+        function showStep(step) {
+            // Update wizard steps
+            document.querySelectorAll('.wizard-step').forEach((stepEl, index) => {
+                if (index < step - 1) {
+                    stepEl.classList.add('completed');
+                    stepEl.classList.remove('active');
+                } else if (index === step - 1) {
+                    stepEl.classList.add('active');
+                    stepEl.classList.remove('completed');
+                } else {
+                    stepEl.classList.remove('active', 'completed');
+                }
+            });
+            
+            // Show/hide panels
+            document.querySelectorAll('.wizard-panel').forEach(panel => {
+                panel.style.display = 'none';
+            });
+            document.getElementById(`step${step}`).style.display = 'block';
+            
+            // Update buttons
+            document.getElementById('prevBtn').style.display = step > 1 ? 'block' : 'none';
+            document.getElementById('nextBtn').style.display = step < 4 ? 'block' : 'none';
+            document.getElementById('createBtn').style.display = step === 4 ? 'block' : 'none';
+            
+            currentStep = step;
+            
+            // Load step-specific content
+            if (step === 2 && selectedTemplate) {
+                loadConfigurationStep();
+            } else if (step === 3) {
+                loadHealthCheckStep();
+            } else if (step === 4) {
+                loadReviewStep();
+            }
+        }
+        
+        function loadConfigurationStep() {
+            // Load icon options
+            const iconSelector = document.getElementById('iconSelector');
+            iconSelector.innerHTML = '';
+            
+            const icons = selectedTemplate.icon_options || ['🔧', '⚙️', '🔐', '📦'];
+            icons.forEach(icon => {
+                const option = document.createElement('div');
+                option.className = 'icon-option';
+                option.textContent = icon;
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.icon-option').forEach(opt => 
+                        opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    serviceConfig.icon = icon;
+                });
+                iconSelector.appendChild(option);
+            });
+            
+            // Select first icon by default
+            if (iconSelector.firstChild) {
+                iconSelector.firstChild.click();
+            }
+            
+            // Load fields
+            const fieldBuilder = document.getElementById('fieldBuilder');
+            fieldBuilder.innerHTML = '';
+            
+            if (selectedTemplate.fields) {
+                selectedTemplate.fields.forEach(field => {
+                    addFieldToBuilder(field);
+                });
+            }
+            
+            // Handle subtypes
+            if (selectedTemplate.subtypes) {
+                // Add subtype selector
+                const subtypeGroup = document.createElement('div');
+                subtypeGroup.className = 'form-group';
+                subtypeGroup.innerHTML = `
+                    <label class="form-label">Service Type</label>
+                    <select class="form-select" id="subtypeSelect">
+                        ${Object.entries(selectedTemplate.subtypes).map(([key, subtype]) => 
+                            `<option value="${key}">${subtype.name}</option>`
+                        ).join('')}
+                    </select>
+                `;
+                fieldBuilder.insertBefore(subtypeGroup, fieldBuilder.firstChild);
+                
+                // Handle subtype change
+                document.getElementById('subtypeSelect').addEventListener('change', (e) => {
+                    const subtype = selectedTemplate.subtypes[e.target.value];
+                    // Clear existing fields
+                    Array.from(fieldBuilder.children).forEach(child => {
+                        if (child !== subtypeGroup) child.remove();
+                    });
+                    // Add subtype fields
+                    subtype.fields.forEach(field => {
+                        addFieldToBuilder(field);
+                    });
+                });
+                
+                // Trigger initial load
+                document.getElementById('subtypeSelect').dispatchEvent(new Event('change'));
+            }
+        }
+        
+        function addFieldToBuilder(fieldDef) {
+            const fieldBuilder = document.getElementById('fieldBuilder');
+            const fieldItem = document.createElement('div');
+            fieldItem.className = 'field-item';
+            
+            const fieldId = `field_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            
+            fieldItem.innerHTML = `
+                <div class="field-actions">
+                    <button class="field-action-btn" onclick="removeField('${fieldId}')">✕</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        ${fieldDef.label}
+                        ${fieldDef.required ? '<span class="required">*</span>' : ''}
+                    </label>
+                    ${renderFieldInput(fieldDef, fieldId)}
+                    ${fieldDef.validation ? `<small style="color: #718096;">${fieldDef.validation}</small>` : ''}
+                </div>
+            `;
+            
+            fieldItem.dataset.fieldId = fieldId;
+            fieldItem.dataset.fieldDef = JSON.stringify(fieldDef);
+            
+            fieldBuilder.appendChild(fieldItem);
+        }
+        
+        function renderFieldInput(fieldDef, fieldId) {
+            switch (fieldDef.type) {
+                case 'select':
+                    return `
+                        <select class="form-select" id="${fieldId}">
+                            ${fieldDef.options.map(opt => 
+                                `<option value="${opt}" ${opt === fieldDef.default ? 'selected' : ''}>${opt}</option>`
+                            ).join('')}
+                        </select>
+                    `;
+                case 'number':
+                    return `
+                        <input type="number" class="form-input" id="${fieldId}"
+                               placeholder="${fieldDef.placeholder || ''}"
+                               value="${fieldDef.default || ''}"
+                               ${fieldDef.min ? `min="${fieldDef.min}"` : ''}
+                               ${fieldDef.max ? `max="${fieldDef.max}"` : ''}>
+                    `;
+                case 'json':
+                case 'textarea':
+                    return `
+                        <textarea class="form-textarea" id="${fieldId}"
+                                  placeholder="${fieldDef.placeholder || ''}"></textarea>
+                    `;
+                case 'password':
+                    return `
+                        <input type="password" class="form-input" id="${fieldId}"
+                               placeholder="${fieldDef.placeholder || ''}">
+                    `;
+                case 'url':
+                    return `
+                        <input type="url" class="form-input" id="${fieldId}"
+                               placeholder="${fieldDef.placeholder || ''}">
+                    `;
+                default:
+                    return `
+                        <input type="text" class="form-input" id="${fieldId}"
+                               placeholder="${fieldDef.placeholder || ''}"
+                               value="${fieldDef.default || ''}">
+                    `;
+            }
+        }
+        
+        function removeField(fieldId) {
+            const fieldItem = document.querySelector(`[data-field-id="${fieldId}"]`);
+            if (fieldItem) {
+                fieldItem.remove();
+            }
+        }
+        
+        function loadHealthCheckStep() {
+            const healthCheckType = document.getElementById('healthCheckType');
+            
+            healthCheckType.addEventListener('change', async (e) => {
+                const type = e.target.value;
+                const fieldsContainer = document.getElementById('healthCheckFields');
+                fieldsContainer.innerHTML = '';
+                
+                if (type === 'none') return;
+                
+                try {
+                    const response = await fetch('/api/health-check-types');
+                    const types = await response.json();
+                    
+                    const healthCheckDef = types[type];
+                    if (healthCheckDef && healthCheckDef.fields) {
+                        healthCheckDef.fields.forEach(field => {
+                            const fieldGroup = document.createElement('div');
+                            fieldGroup.className = 'form-group';
+                            
+                            fieldGroup.innerHTML = `
+                                <label class="form-label">
+                                    ${field.label}
+                                    ${field.required ? '<span class="required">*</span>' : ''}
+                                </label>
+                                ${renderFieldInput(field, `hc_${field.key}`)}
+                            `;
+                            
+                            fieldsContainer.appendChild(fieldGroup);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Failed to load health check types:', error);
+                }
+            });
+        }
+        
+        function loadReviewStep() {
+            // Collect all configuration
+            serviceConfig.id = document.getElementById('serviceId').value;
+            serviceConfig.name = document.getElementById('serviceName').value;
+            serviceConfig.color = document.getElementById('serviceColor').value;
+            
+            // Collect fields
+            serviceConfig.keys = [];
+            serviceConfig.required = [];
+            
+            document.querySelectorAll('.field-item').forEach(item => {
+                const fieldDef = JSON.parse(item.dataset.fieldDef);
+                serviceConfig.keys.push(fieldDef);
+                if (fieldDef.required) {
+                    serviceConfig.required.push(fieldDef.key);
+                }
+            });
+            
+            // Collect health check
+            const healthCheckType = document.getElementById('healthCheckType').value;
+            serviceConfig.health_check = { type: healthCheckType };
+            
+            if (healthCheckType !== 'none') {
+                document.querySelectorAll('#healthCheckFields input, #healthCheckFields select').forEach(input => {
+                    const key = input.id.replace('hc_', '');
+                    serviceConfig.health_check[key] = input.value;
+                });
+            }
+            
+            // Generate preview
+            const preview = document.getElementById('servicePreview');
+            preview.innerHTML = `
+                <div class="preview-header">
+                    <div class="preview-icon">${serviceConfig.icon}</div>
+                    <div>
+                        <div class="preview-title">${serviceConfig.name}</div>
+                        <div style="color: #718096; font-size: 14px;">ID: ${serviceConfig.id}</div>
+                    </div>
+                    <div style="margin-left: auto; width: 40px; height: 40px; border-radius: 8px; background: ${serviceConfig.color};"></div>
+                </div>
+                
+                <div class="preview-fields">
+                    <h3 style="font-size: 14px; color: #4a5568; margin-bottom: 10px;">Credential Fields</h3>
+                    ${serviceConfig.keys.map(field => `
+                        <div class="preview-field">
+                            <span class="preview-field-key">
+                                ${field.label}
+                                ${field.required ? '<span style="color: #e53e3e;">*</span>' : ''}
+                            </span>
+                            <span class="preview-field-type">${field.type}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h3 style="font-size: 14px; color: #4a5568; margin-bottom: 10px;">Health Check</h3>
+                    <div style="color: #718096; font-size: 14px;">
+                        Type: ${healthCheckType === 'none' ? 'No health check' : healthCheckType}
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function createService() {
+            try {
+                const response = await fetch('/api/service/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(serviceConfig)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert(`Service "${serviceConfig.name}" created successfully!`);
+                    window.location.href = '/';
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to create service: ${error.message}`);
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (validateCurrentStep()) {
+                showStep(currentStep + 1);
+            }
+        });
+        
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            showStep(currentStep - 1);
+        });
+        
+        document.getElementById('createBtn').addEventListener('click', createService);
+        
+        document.getElementById('addFieldBtn').addEventListener('click', () => {
+            const customField = {
+                key: `CUSTOM_FIELD_${Date.now()}`,
+                label: 'Custom Field',
+                type: 'text',
+                required: false,
+                placeholder: 'Enter value'
+            };
+            addFieldToBuilder(customField);
+        });
+        
+        document.getElementById('serviceColor').addEventListener('input', (e) => {
+            document.getElementById('colorPreview').style.background = e.target.value;
+        });
+        
+        function validateCurrentStep() {
+            if (currentStep === 1) {
+                if (!selectedTemplate) {
+                    alert('Please select a template');
+                    return false;
+                }
+            } else if (currentStep === 2) {
+                const serviceId = document.getElementById('serviceId').value;
+                const serviceName = document.getElementById('serviceName').value;
+                
+                if (!serviceId || !serviceName) {
+                    alert('Please fill in all required fields');
+                    return false;
+                }
+                
+                if (!/^[a-z0-9_]+$/.test(serviceId)) {
+                    alert('Service ID must contain only lowercase letters, numbers, and underscores');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // Initialize
+        loadTemplates();
+        document.getElementById('colorPreview').style.background = '#667eea';
+    </script>
+</body>
+</html>
