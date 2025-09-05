@@ -14,6 +14,8 @@
 #include <net/nrf_cloud.h>
 #if defined(CONFIG_SOFTSIM)
 #include <nrf_softsim.h>
+#include <zephyr/drivers/uart.h>
+#include <zephyr/sys/ring_buffer.h>
 #endif
 
 /* Module name is used by the Application Event Manager macros in this file */
@@ -32,6 +34,21 @@
 #include <zephyr/logging/log_ctrl.h>
 
 LOG_MODULE_REGISTER(MODULE, CONFIG_APPLICATION_MODULE_LOG_LEVEL);
+
+#if defined(CONFIG_SOFTSIM)
+#define SOFTSIM_PROFILE_MIN_SIZE 180
+#define SOFTSIM_PROFILE_MAX_SIZE 360
+
+K_SEM_DEFINE(softsim_profile_received, 0, 1);
+
+struct softsim_rx_buf {
+	char *buf;
+	size_t len;
+	size_t pos;
+};
+
+static const struct device *const uart_dev = DEVICE_DT_GET(DT_NODELABEL(uart0));
+#endif
 
 /* Message structure. Events from other modules are converted to messages
  * in the Application Event Manager handler, and then queued up in the message queue
@@ -175,6 +192,99 @@ static void sub_state_set(enum sub_state_type new_state)
 
 	sub_state = new_state;
 }
+
+#if defined(CONFIG_SOFTSIM)
+static void softsim_uart_callback(const struct device *dev, void *user_data)
+{
+	int rx_recv = 0;
+	struct softsim_rx_buf *rx = (struct softsim_rx_buf *)user_data;
+	char *rx_buf = rx->buf;
+	size_t *rx_buf_pos = &rx->pos;
+
+	if (!uart_irq_update(uart_dev)) {
+		return;
+	}
+
+	while (uart_irq_rx_ready(uart_dev)) {
+		rx_recv = uart_fifo_read(uart_dev, &rx_buf[*rx_buf_pos], 1);
+
+		if ((rx_buf[*rx_buf_pos] == '\n') || (rx_buf[*rx_buf_pos] == '\r')) {
+			rx_buf[*rx_buf_pos] = 0;
+			k_sem_give(&softsim_profile_received);
+			return;
+		}
+
+		*rx_buf_pos += rx_recv;
+	}
+}
+
+static int softsim_provision_external_profile(void)
+{
+	if (nrf_softsim_check_provisioned()) {
+		LOG_INF("SoftSIM profile already provisioned");
+		return 0;
+	}
+
+	if (!device_is_ready(uart_dev)) {
+		LOG_ERR("UART device not ready for SoftSIM profile provisioning");
+		return -ENODEV;
+	}
+
+	char *profile_buffer = k_malloc(SOFTSIM_PROFILE_MAX_SIZE);
+	if (profile_buffer == NULL) {
+		LOG_ERR("Failed to allocate memory for SoftSIM profile");
+		return -ENOMEM;
+	}
+
+	struct softsim_rx_buf rx = {
+		.buf = profile_buffer,
+		.len = SOFTSIM_PROFILE_MAX_SIZE,
+		.pos = 0,
+	};
+
+	LOG_INF("Waiting for SoftSIM profile via UART (terminate with newline)");
+	
+	uart_irq_callback_user_data_set(uart_dev, softsim_uart_callback, &rx);
+	uart_irq_rx_enable(uart_dev);
+
+	int ret = k_sem_take(&softsim_profile_received, K_SECONDS(30));
+	uart_irq_rx_disable(uart_dev);
+
+	if (ret != 0) {
+		LOG_WRN("SoftSIM profile not received within timeout, continuing without provisioning");
+		k_free(profile_buffer);
+		return -ETIMEDOUT;
+	}
+
+	LOG_INF("SoftSIM profile received: %d characters", rx.pos);
+
+	if (rx.pos < SOFTSIM_PROFILE_MIN_SIZE || rx.pos > SOFTSIM_PROFILE_MAX_SIZE) {
+		LOG_ERR("Invalid SoftSIM profile size: %d (expected %d-%d)", 
+			rx.pos, SOFTSIM_PROFILE_MIN_SIZE, SOFTSIM_PROFILE_MAX_SIZE);
+		k_free(profile_buffer);
+		return -EINVAL;
+	}
+
+	ret = nrf_softsim_provision((uint8_t *)profile_buffer, rx.pos);
+	if (ret != 0) {
+		LOG_ERR("SoftSIM profile provisioning failed: %d", ret);
+		k_free(profile_buffer);
+		return ret;
+	}
+
+	LOG_INF("SoftSIM profile provisioning successful - device will reboot");
+	
+	k_free(profile_buffer);
+	
+	while (log_data_pending()) {
+		log_process();
+		k_yield();
+	}
+	
+	sys_reboot(SYS_REBOOT_COLD);
+	return 0;
+}
+#endif
 
 #if defined(CONFIG_NRF_MODEM_LIB)
 
@@ -542,10 +652,20 @@ int main(void)
 		SEND_EVENT(app, APP_EVT_START);
 
 #if defined(CONFIG_NRF_MODEM_LIB)
-		modem_init();
 #if defined(CONFIG_SOFTSIM)
-		LOG_INF("SoftSIM integration enabled (auto-init)");
+		LOG_INF("SoftSIM integration enabled");
+		
+		if (!nrf_softsim_check_provisioned()) {
+			LOG_INF("SoftSIM not provisioned, attempting external profile provisioning");
+			int err = softsim_provision_external_profile();
+			if (err != 0 && err != -ETIMEDOUT) {
+				LOG_ERR("SoftSIM provisioning failed: %d", err);
+			}
+		} else {
+			LOG_INF("SoftSIM profile already provisioned");
+		}
 #endif
+		modem_init();
 #endif
 	}
 
