@@ -11,30 +11,41 @@ This project implements cellular IoT connectivity solutions for the Nordic Thing
   - Software: Onomondo SoftSIM (profile configured)
 - **Battery**: Disconnected (degraded, running on USB power only)
 
-## Current Status (September 3, 2025)
+## Current Status (September 5, 2025)
 
-### ✅ Physical SIM (iBasis) - OPERATIONAL
-- Connected via TELUS network (Canada) 
-- Location: Surrey/Langley, BC (49.02874/-122.86633)
-- Signal: -100 dBm RSRP
-- Successfully transmitting to nRF Cloud:
-  - GPS coordinates (±400m accuracy)
-  - Temperature: 27.46°C
-  - Humidity: 54.79%
-  - Air Quality: 50 AQI
-  - Pressure: 100688 Pa
-- LED Status: Blue heartbeat (GPS tracking active)
+### ✅ **Phase 1 Complete: Asset Tracker v2 Baseline**
+- **SDK**: Nordic Connect SDK (NCS) v2.9.1 with compatible toolchain v2.8.0
+- **Bootloader**: MCUBoot secure bootloader successfully integrated
+- **Application**: Asset Tracker v2 with TF-M (Trusted Firmware-M) security
+- **Build System**: Sysbuild multi-image compilation working
+- **Flashing**: Successfully deployed to device via J-Link
+- **Status**: **OPERATIONAL** - Asset Tracker application running successfully
 
-### 🔧 SoftSIM (Onomondo) - IN DEVELOPMENT
-- Firmware built with SDK v3.0.2
-- Profile decrypted and integrated
-- UART interface debugging pending
+### 🔧 **Phase 2 Ready: SoftSIM Integration**
+- Baseline foundation established and verified
+- Ready to integrate Onomondo SoftSIM module
+- Build system prepared for external module inclusion
+
+## Project Architecture
+
+### Build System Organization
+- **Project Repository**: `/home/murr2k/projects/thingy91/` (This repository)
+- **NCS Workspace**: `/home/murr2k/ncs/v2.9.1/` (Nordic Connect SDK installation)
+- **Build Output**: `/home/murr2k/ncs/v2.9.1/build/` (Compiled firmware)
+- **Source Code**: `asset_tracker_v2_source/` (Modified Nordic Asset Tracker v2)
+
+### Key Components
+- **MCUBoot Bootloader**: Secure firmware updates capability
+- **TF-M Security**: ARM TrustZone-M secure/non-secure partition
+- **Asset Tracker v2**: Complete IoT application with cellular, GPS, and sensors
+- **West Build System**: Nordic's multi-repository build and package manager
 
 ## Quick Start
 
 ### Prerequisites
-- Nordic nRF Connect SDK v3.0.2
-- SEGGER J-Link v8.66+
+- Nordic nRF Connect SDK v2.9.1
+- Compatible toolchain v2.8.0 (use nRF Connect Toolchain Manager)
+- SEGGER J-Link v8.64a+
 - Python 3.8+
 - West build tool
 
@@ -88,26 +99,81 @@ AT+COPS?           # Current operator
 AT+CSQ             # Signal quality
 ```
 
+## Documentation Index
+
+### 📋 **Core Documentation**
+- **[README.md](README.md)** - This file: Project overview and quick start guide
+- **[CHANGELOG.md](CHANGELOG.md)** - Project version history and changes
+- **[PROJECT_PLAN.md](PROJECT_PLAN.md)** - Development roadmap and milestones
+- **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** - Detailed project organization
+- **[DEVELOPMENT_LOG.md](DEVELOPMENT_LOG.md)** - Development progress and decisions
+
+### 🔧 **Build & Development**
+- **[mcuboot_debug_resolution.md](mcuboot_debug_resolution.md)** - MCUBoot bootloader troubleshooting guide
+- **[west_command_notes.md](west_command_notes.md)** - West build system usage and troubleshooting
+- **[jlink_edu_mini_facts.md](jlink_edu_mini_facts.md)** - J-Link EDU Mini hardware limitations and setup
+- **[vscode_installation_steps.md](vscode_installation_steps.md)** - Development environment setup
+
+### 🌐 **SoftSIM Integration (Phase 2)**
+- **[ONOMONDO_SOFTSIM_SETUP.md](ONOMONDO_SOFTSIM_SETUP.md)** - Onomondo SoftSIM integration guide
+- **[nrf_connect_softsim_guide.md](nrf_connect_softsim_guide.md)** - NCS-specific SoftSIM implementation
+- **[softsim_firmware_analysis.md](softsim_firmware_analysis.md)** - SoftSIM firmware architecture analysis
+- **[softsim_options_comparison.md](softsim_options_comparison.md)** - SoftSIM vs physical SIM comparison
+- **[softsim_status_report.md](softsim_status_report.md)** - Current SoftSIM implementation status
+
+### 📊 **Status Reports & Analysis**
+- **[success_report.md](success_report.md)** - Successful implementations summary
+- **[cellular_connection_success.md](cellular_connection_success.md)** - Cellular connectivity achievements
+- **[nrf_cloud_sim_report.md](nrf_cloud_sim_report.md)** - nRF Cloud integration status
+- **[onomondo_account_report.md](onomondo_account_report.md)** - Onomondo service configuration
+
+### 🔐 **Security & Credentials**
+- **[SECRETS_MANAGEMENT.md](SECRETS_MANAGEMENT.md)** - Comprehensive credentials management
+- **[SECRETS_QUICKSTART.md](SECRETS_QUICKSTART.md)** - Quick setup for credentials
+- **[SECRETS_CUSTOM.md](SECRETS_CUSTOM.md)** - Custom credential configuration
+- **[secrets_gui/](secrets_gui/)** - GUI-based secrets management system
+
+### 🧪 **Testing Framework**
+- **[test_plan.md](test_plan.md)** - Overall testing strategy
+- **[tests/](tests/)** - Comprehensive testing documentation:
+  - **[unit_tests.md](tests/unit_tests.md)** - Component-level testing
+  - **[integration_tests.md](tests/integration_tests.md)** - System integration testing
+  - **[system_tests.md](tests/system_tests.md)** - End-to-end system validation
+  - **[performance_benchmarking.md](tests/performance_benchmarking.md)** - Performance metrics
+  - **[power_consumption_tests.md](tests/power_consumption_tests.md)** - Battery life analysis
+
+### 🛠️ **Environment Setup**
+- **[SETUP_WSL_WINDOWS.md](SETUP_WSL_WINDOWS.md)** - Windows WSL development environment
+- **[bootloader_recovery_guide.md](bootloader_recovery_guide.md)** - Device recovery procedures
+- **[thingy91_troubleshooting.md](thingy91_troubleshooting.md)** - Hardware troubleshooting
+
+### 📈 **Project History**
+- **[DEMO_OVERVIEW.md](DEMO_OVERVIEW.md)** - Demonstration and proof-of-concept results
+- **[sdk_compatibility_update.md](sdk_compatibility_update.md)** - SDK version compatibility matrix
+
 ## Project Structure
 ```
-thingy91/
-├── firmware/
-│   ├── asset_tracker_v2.hex       # Full IoT application
-│   ├── serial_lte_modem.hex       # AT command interface
-│   └── connectivity_bridge.hex     # nRF52 USB bridge
-├── softsim/
-│   ├── profile.conf                # Onomondo configuration
-│   └── build/                      # SoftSIM firmware builds
-├── scripts/
-│   ├── test_com.ps1                # UART testing
-│   ├── monitor_asset_tracker.ps1   # Application monitor
-│   └── flash_*.jlink               # J-Link scripts
-├── docs/
-│   └── status_reports/             # Project history
-├── .gitignore
-├── README.md
-├── CHANGELOG.md
-└── west.yml
+thingy91/                                    # This Git repository
+├── asset_tracker_v2_source/                # Modified Nordic Asset Tracker v2 source
+│   ├── src/                                 # Application source code
+│   ├── sysbuild/                           # Multi-image build configuration
+│   └── boards/                             # Board-specific configurations
+├── modules/                                 # External modules (SoftSIM when integrated)
+├── build/                                  # Local build artifacts
+├── tests/                                  # Testing framework and scripts
+├── secrets_gui/                            # Credential management system
+├── scripts/                                # Utility scripts and automation
+├── *.md                                    # Documentation (see index above)
+├── west.yml                                # West workspace manifest
+└── .gitignore                              # Git ignore rules
+
+External Dependencies:
+├── /home/murr2k/ncs/v2.9.1/               # Nordic Connect SDK workspace
+│   ├── build/                              # Actual firmware build output
+│   ├── nrf/                                # Nordic SDK modules
+│   ├── zephyr/                             # Zephyr RTOS
+│   └── ...                                 # Other NCS components
+└── /home/murr2k/ncs/toolchains/           # NCS toolchain installations
 ```
 
 ## Troubleshooting
